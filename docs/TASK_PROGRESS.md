@@ -1,7 +1,7 @@
 # Task Tracker
 
 - [x] PHASE 1: The Vault
-- [ ] PHASE 2: The Arsenal
+- [x] PHASE 2: The Arsenal
 - [ ] PHASE 3: The Heists
 - [ ] PHASE 4: The Phantom Movement
 - [ ] PHASE 5: UX Polish
