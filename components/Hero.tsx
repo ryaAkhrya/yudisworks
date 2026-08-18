@@ -60,6 +60,14 @@ export default function Hero({ headlineLine1, headlineLine2, bio, photoUrl, what
       );
     }
 
+    // ─── Subtle Drifting / Breathing for Main Content ───
+    gsap.to(headlineRef.current, { y: -15, duration: 4, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 1.5 });
+    gsap.to(textBlockRef.current, { y: -10, duration: 5, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 2.0 });
+    gsap.to(ctaRef.current, { y: -8, duration: 3.5, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 2.5 });
+    if (photoRef.current) {
+      gsap.to(photoRef.current, { y: -12, duration: 4.5, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 1.8 });
+    }
+
     // ─── Kinetic floating background elements (Slower Drift) ───
     gsap.to(float1Ref.current, {
       y: -28, x: 12, rotate: 8,
@@ -109,8 +117,18 @@ export default function Hero({ headlineLine1, headlineLine2, bio, photoUrl, what
           backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, #121212 10px, #121212 12px)'
         }} />
 
+        {/* Giant Marquee Typography */}
+        <div className="absolute top-[20%] left-0 w-max -skew-y-6 opacity-[0.03] flex animate-marquee z-0">
+          <span className="text-[12rem] md:text-[20rem] font-black uppercase text-p5-black tracking-tighter leading-none pr-16">
+            I'LL STEAL YOUR DEADLINES — I'LL STEAL YOUR DEADLINES
+          </span>
+          <span className="text-[12rem] md:text-[20rem] font-black uppercase text-p5-black tracking-tighter leading-none pr-16">
+            I'LL STEAL YOUR DEADLINES — I'LL STEAL YOUR DEADLINES
+          </span>
+        </div>
+
         {/* Slash stripe */}
-        <div className="absolute top-0 right-0 w-[55%] h-full bg-p5-black/5 -skew-x-12 origin-top-right" />
+        <div className="absolute top-0 right-0 w-[55%] h-full bg-p5-black/5 -skew-x-12 origin-top-right z-0" />
 
         {/* Floating block 1 — big red */}
         <div ref={float1Ref} className="absolute top-16 right-[38%] w-48 h-16 bg-p5-red skew-p5 opacity-90 border-4 border-p5-black shadow-[6px_6px_0px_#121212]" />

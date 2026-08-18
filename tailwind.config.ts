@@ -13,6 +13,21 @@ const config: Config = {
         "p5-black": "#121212",
         "p5-paper": "#F5F5F5",
       },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-15px)' },
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        }
+      },
+      animation: {
+        'float-slow': 'float 5s ease-in-out infinite',
+        'float-slower': 'float 7s ease-in-out infinite',
+        'marquee': 'marquee 40s linear infinite',
+      },
     },
     // Enforce anti-slop rules
     borderRadius: {
