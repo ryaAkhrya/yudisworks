@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 - Initial documentation setup for AI agents.
+- **CMS + Public UI Refactor:** Expanded database schema to `project_categories` + `project_items` (replaces old `heists`). Built `<ProjectCategories />` client component with GSAP accordion expand and P5-styled category cards. Built `<DocumentViewer />` modal with GSAP slam-in animation rendering scrollable classified document pages. Updated Control Room to 3-panel CRUD (Categories, Project Items, Testimonials). Updated `database.sql` with new schema and RLS policies.
 - **Phase 7 Complete:** Addressed Next.js 15 routing warnings (renamed middleware to proxy.ts, unwrapped searchParams promise) and fixed UX bugs (ScrollProgress z-index fix, LoadingScreen strict unmount). Project is fully completed and ready for Vercel/Supabase deployment.
 - **Phase 6 Complete:** Built the backend Control Room using Next.js Route Handlers, Middleware, and Server Actions for Supabase. Created a rugged `studio/login` portal and a protected `studio` dashboard that lists Heists/Testimonials and includes functional forms for adding/deleting data directly to Supabase.
 - **Phase 5 Complete:** Added frontend UX Polish elements. Built the aggressive `LoadingScreen` with an instant cut on load, implemented a blocky `ScrollProgress` bar, and created `PhanSiteTestimonials` featuring a live-forum continuous vertical scroll powered by GSAP.

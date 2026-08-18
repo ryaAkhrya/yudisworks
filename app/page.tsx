@@ -1,6 +1,6 @@
 import Hero from "@/components/Hero";
 import Services from "@/components/Services";
-import PortfolioGrid from "@/components/PortfolioGrid";
+import ProjectCategoriesWrapper from "@/app/ProjectCategoriesWrapper";
 import LoadingScreen from "@/components/LoadingScreen";
 import ScrollProgress from "@/components/ScrollProgress";
 import PhanSiteTestimonials from "@/components/PhanSiteTestimonials";
@@ -12,7 +12,7 @@ export default function Home() {
       <ScrollProgress />
       <Hero />
       <Services />
-      <PortfolioGrid />
+      <ProjectCategoriesWrapper />
       <PhanSiteTestimonials />
     </main>
   );

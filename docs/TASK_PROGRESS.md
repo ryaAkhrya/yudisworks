@@ -7,3 +7,4 @@
 - [x] PHASE 5: UX Polish
 - [x] PHASE 6: The Control Room (Admin CMS)
 - [x] PHASE 7: Deployment
+- [x] REFACTOR: CMS + Public UI Architecture (ProjectCategories, DocumentViewer, 3-panel Studio CRUD)
