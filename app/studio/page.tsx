@@ -102,7 +102,7 @@ export default async function StudioDashboard() {
             <h2 className="text-3xl font-black text-p5-black uppercase mb-6 border-b-4 border-p5-black pb-2">
               {"// Project Files (Items)"}
             </h2>
-            <form action={addProjectItem} className="flex flex-col gap-3 mb-8" encType="multipart/form-data">
+            <form action={addProjectItem} className="flex flex-col gap-3 mb-8">
               <select name="category_id" required className={`${inputCls} bg-p5-paper`}>
                 <option value="">— Select Category —</option>
                 {displayCategories.map((c) => (
