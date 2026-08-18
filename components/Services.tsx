@@ -1,4 +1,8 @@
-import React from "react";
+"use client";
+
+import React, { useRef } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
+import Marquee from "@/components/Marquee";
 
 const servicesData = [
   {
@@ -7,6 +11,8 @@ const servicesData = [
     offsetClasses: "md:-ml-12 md:mt-0",
     bgClass: "bg-p5-paper",
     textColor: "text-p5-black",
+    hoverBgClass: "hover:bg-p5-black",
+    hoverTextColor: "hover:text-p5-paper",
   },
   {
     title: "Presentation Alchemist",
@@ -14,6 +20,8 @@ const servicesData = [
     offsetClasses: "md:ml-32 md:mt-16",
     bgClass: "bg-p5-black",
     textColor: "text-p5-paper",
+    hoverBgClass: "hover:bg-p5-red",
+    hoverTextColor: "hover:text-p5-black",
   },
   {
     title: "Web Developer",
@@ -21,22 +29,67 @@ const servicesData = [
     offsetClasses: "md:ml-12 md:mt-24",
     bgClass: "bg-p5-red",
     textColor: "text-p5-paper",
+    hoverBgClass: "hover:bg-p5-black",
+    hoverTextColor: "hover:text-p5-red",
   },
 ];
 
 export default function Services() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLHeadingElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  useGSAP(() => {
+    // Aggressive scroll animation for header
+    gsap.fromTo(headerRef.current,
+      { x: -300, opacity: 0, skewX: 20 },
+      {
+        x: 0, opacity: 1, skewX: 0,
+        duration: 0.6,
+        ease: "expo.out",
+        scrollTrigger: {
+          trigger: headerRef.current,
+          start: "top 80%",
+        }
+      }
+    );
+
+    // Whip in for cards
+    cardsRef.current.forEach((card) => {
+      gsap.fromTo(card,
+        { y: 150, opacity: 0, scale: 0.8, skewY: 10 },
+        {
+          y: 0, opacity: 1, scale: 1, skewY: 0,
+          duration: 0.5,
+          ease: "back.out(2.5)",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+          }
+        }
+      );
+    });
+
+  }, { scope: containerRef });
+
+  const handleHover = (e: React.MouseEvent<HTMLDivElement>) => {
+    gsap.to(e.currentTarget, {
+      x: "random(-5, 5)",
+      y: "random(-5, 5)",
+      duration: 0.08,
+      yoyo: true,
+      repeat: 3,
+    });
+  };
+
   return (
-    <section className="relative w-full py-24 px-6 md:px-16 bg-p5-black overflow-hidden">
-      {/* Abstract aggressive section title */}
-      <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none flex items-center justify-center">
-        <h2 className="text-[12rem] font-black uppercase text-p5-paper whitespace-nowrap -skew-x-12">
-          THE ARSENAL
-        </h2>
-      </div>
+    <section ref={containerRef} className="relative w-full py-24 px-6 md:px-16 bg-p5-black overflow-hidden">
+      
+      <Marquee />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         <div className="mb-16">
-          <h2 className="inline-block bg-p5-paper text-p5-black text-5xl md:text-7xl font-black uppercase px-6 py-2 skew-p5 border-4 border-p5-red shadow-[8px_8px_0px_#CE0000]">
+          <h2 ref={headerRef} className="inline-block bg-p5-paper text-p5-black text-5xl md:text-7xl font-black uppercase px-6 py-2 skew-p5 border-4 border-p5-red shadow-[8px_8px_0px_#CE0000]">
             The Arsenal
           </h2>
         </div>
@@ -45,7 +98,9 @@ export default function Services() {
           {servicesData.map((service, index) => (
             <div
               key={index}
-              className={`relative p-8 md:p-10 border-8 border-p5-black shadow-[12px_12px_0px_#121212] skew-p5 max-w-2xl transform transition-transform duration-200 hover:-translate-y-2 hover:skew-x-2 ${service.bgClass} ${service.textColor} ${service.offsetClasses}`}
+              ref={(el) => { cardsRef.current[index] = el; }}
+              onMouseEnter={handleHover}
+              className={`relative p-8 md:p-10 border-8 border-p5-black shadow-[12px_12px_0px_#121212] skew-p5 max-w-2xl transform transition-colors duration-0 cursor-pointer ${service.bgClass} ${service.textColor} ${service.hoverBgClass} ${service.hoverTextColor} ${service.offsetClasses}`}
             >
               {/* Fake tape or accent element */}
               <div className="absolute -top-4 -left-4 w-12 h-12 bg-p5-red border-4 border-p5-black -skew-y-12" />
