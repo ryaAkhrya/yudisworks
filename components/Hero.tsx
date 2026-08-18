@@ -158,9 +158,9 @@ export default function Hero({ headlineLine1, headlineLine2, bio, photoUrl, what
         </div>
 
         {/* Right: Profile Photo or geometric placeholder */}
-        <div ref={photoRef} className="flex-shrink-0 md:mt-12 relative">
+        <div ref={photoRef} className="flex-shrink-0 md:mt-12 relative w-full md:w-auto flex justify-center md:justify-end">
           {photoUrl ? (
-            <div className="relative border-8 border-p5-black shadow-[16px_16px_0px_#CE0000] -skew-y-3 overflow-hidden w-64 h-80 md:w-80 md:h-96">
+            <div className="relative border-8 border-p5-black shadow-[16px_16px_0px_#CE0000] -skew-y-3 overflow-hidden w-80 h-[28rem] md:w-[28rem] md:h-[40rem] lg:w-[32rem] lg:h-[45rem]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={photoUrl}
@@ -176,7 +176,7 @@ export default function Hero({ headlineLine1, headlineLine2, bio, photoUrl, what
             </div>
           ) : (
             // Geometric placeholder if no photo
-            <div className="relative w-64 h-80 md:w-72 md:h-96">
+            <div className="relative w-80 h-[28rem] md:w-[28rem] md:h-[40rem] lg:w-[32rem] lg:h-[45rem]">
               <div className="absolute inset-0 bg-p5-black border-8 border-p5-red shadow-[16px_16px_0px_#CE0000] -skew-y-3" />
               <div className="absolute top-8 left-8 right-8 h-1/2 bg-p5-red/20 border-4 border-p5-red skew-y-6" />
               <div className="absolute bottom-8 left-8 right-8 h-1/4 bg-p5-paper/10 border-4 border-p5-paper/30 -skew-y-3" />
