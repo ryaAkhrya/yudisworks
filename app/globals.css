@@ -15,3 +15,10 @@ body {
   background-image: radial-gradient(rgba(18, 18, 18, 0.1) 1.5px, transparent 1.5px);
   background-size: 10px 10px;
 }
+
+/* Hide default cursor on desktop devices, let the custom cursor take over */
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
