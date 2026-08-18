@@ -14,7 +14,7 @@ export default async function HeroWrapper() {
   const { data, error } = await supabase
     .from("hero_content")
     .select("*")
-    .limit(1)
+    .eq("id", "00000000-0000-0000-0000-000000000001")
     .maybeSingle();
 
   if (error) {

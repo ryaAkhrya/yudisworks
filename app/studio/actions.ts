@@ -41,41 +41,25 @@ export async function updateHeroContent(formData: FormData) {
     }
   }
 
-  const update: Record<string, string> = {
+  const update = {
+    id: "00000000-0000-0000-0000-000000000001",
     headline_line1,
     headline_line2,
     bio,
     whatsapp_number,
+    ...(photo_url && { photo_url }),
   };
-  if (photo_url) update.photo_url = photo_url;
 
-  console.log("updateHeroContent: persisting →", update);
+  console.log("updateHeroContent: forcefully upserting →", update);
 
-  // Deterministically fetch the very first row that exists (if any)
-  const { data: allRows, error: fetchErr } = await supabase
+  const { error: upsertErr } = await supabase
     .from("hero_content")
-    .select("id")
-    .limit(1);
+    .upsert([update], { onConflict: "id" });
 
-  if (fetchErr) console.error("updateHeroContent: fetch error", fetchErr);
-
-  if (allRows && allRows.length > 0) {
-    const targetId = allRows[0].id;
-    const { error: updateErr } = await supabase
-      .from("hero_content")
-      .update(update)
-      .eq("id", targetId);
-    
-    if (updateErr) console.error("updateHeroContent: update error", updateErr);
-    else console.log("updateHeroContent: row updated ✓ ID:", targetId);
+  if (upsertErr) {
+    console.error("updateHeroContent: upsert error", upsertErr);
   } else {
-    // Only insert if the table is completely empty (0 rows)
-    const { error: insertErr } = await supabase
-      .from("hero_content")
-      .insert([update]);
-      
-    if (insertErr) console.error("updateHeroContent: insert error", insertErr);
-    else console.log("updateHeroContent: fresh row inserted ✓");
+    console.log("updateHeroContent: forceful upsert success ✓");
   }
 
   revalidatePath("/");

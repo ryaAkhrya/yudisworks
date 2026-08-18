@@ -28,7 +28,7 @@ export default async function StudioDashboard() {
     supabase.from("testimonials").select("*").order("created_at", { ascending: false }),
     supabase.from("project_categories").select("*").order("created_at", { ascending: true }),
     supabase.from("project_items").select("*, project_categories(name)").order("created_at", { ascending: false }),
-    supabase.from("hero_content").select("id, headline_line1, headline_line2, bio, whatsapp_number, photo_url, created_at").limit(1).maybeSingle(),
+    supabase.from("hero_content").select("id, headline_line1, headline_line2, bio, whatsapp_number, photo_url, created_at").eq("id", "00000000-0000-0000-0000-000000000001").maybeSingle(),
   ]);
 
   const displayTestis = testimonials ?? [];
