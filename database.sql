@@ -41,11 +41,30 @@ CREATE TABLE project_items (
 );
 
 -- =========================================
+-- HERO CONTENT (singleton, id always = 1)
+-- =========================================
+CREATE TABLE IF NOT EXISTS hero_content (
+  id INT PRIMARY KEY DEFAULT 1,
+  headline_line1 TEXT NOT NULL DEFAULT 'I''LL STEAL',
+  headline_line2 TEXT NOT NULL DEFAULT 'YOUR DEADLINES',
+  bio TEXT NOT NULL DEFAULT 'Gua ngerjain apa yang lu males kerjain. Dari tugas kuliah, makalah, PPT estetik, sampai bikin website dari nol. Lu duduk manis, kerjaan beres.',
+  photo_url TEXT,
+  whatsapp_number TEXT NOT NULL DEFAULT '1234567890'
+);
+-- Seed default row
+INSERT INTO hero_content (id) VALUES (1) ON CONFLICT DO NOTHING;
+
+-- =========================================
 -- STORAGE BUCKETS
 -- =========================================
 INSERT INTO storage.buckets (id, name, public)
 VALUES ('project-files', 'project-files', true)
 ON CONFLICT DO NOTHING;
+
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('hero-assets', 'hero-assets', true)
+ON CONFLICT DO NOTHING;
+
 
 -- =========================================
 -- ROW LEVEL SECURITY
@@ -78,3 +97,19 @@ CREATE POLICY "project_files_auth_insert" ON storage.objects
 
 CREATE POLICY "project_files_auth_delete" ON storage.objects
   FOR DELETE USING (bucket_id = 'project-files' AND auth.role() = 'authenticated');
+
+-- Hero Content Policies (public read, authenticated update only)
+ALTER TABLE hero_content ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "hero_select_public" ON hero_content FOR SELECT USING (true);
+CREATE POLICY "hero_update_auth" ON hero_content FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "hero_insert_auth" ON hero_content FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+
+-- Storage Policy for hero-assets
+CREATE POLICY "hero_assets_public_read" ON storage.objects
+  FOR SELECT USING (bucket_id = 'hero-assets');
+
+CREATE POLICY "hero_assets_auth_insert" ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'hero-assets' AND auth.role() = 'authenticated');
+
+CREATE POLICY "hero_assets_auth_delete" ON storage.objects
+  FOR DELETE USING (bucket_id = 'hero-assets' AND auth.role() = 'authenticated');
