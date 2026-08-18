@@ -25,24 +25,33 @@ export default function LoadingScreen() {
 
     // 2. Banner snaps and slices away diagonally
     tl.to(bannerRef.current, {
-      y: "-150%",
+      yPercent: -200,
       skewY: -20,
       duration: 0.6,
-      ease: "power4.in",
+      ease: "power3.in",
+      force3D: true,
     }, "+=0.2");
 
     // 3. Red background splits in half and slides out (cinematic slice)
     tl.to(bgTopRef.current, {
-      yPercent: -100,
-      duration: 0.8,
+      yPercent: -120,
+      duration: 0.9,
       ease: "expo.inOut",
-    }, "-=0.3");
+      force3D: true,
+    }, "-=0.2");
     
     tl.to(bgBottomRef.current, {
-      yPercent: 100,
-      duration: 0.8,
+      yPercent: 120,
+      duration: 0.9,
       ease: "expo.inOut",
+      force3D: true,
     }, "<");
+
+    // 4. Smoothly fade out wrapper before unmounting to prevent visual popping
+    tl.to(containerRef.current, {
+      autoAlpha: 0,
+      duration: 0.1,
+    });
 
   }, { scope: containerRef });
 
