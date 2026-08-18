@@ -25,10 +25,11 @@ export async function updateHeroContent(formData: FormData) {
   let photo_url: string | undefined;
 
   if (photo && photo.size > 0) {
+    // Unique filename guarantees we only INSERT, avoiding the Storage UPDATE RLS bug
     const fileName = `hero-${Date.now()}-${photo.name.replace(/\s/g, "_")}`;
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from("hero-assets")
-      .upload(fileName, photo, { upsert: true });
+      .upload(fileName, photo); // Removed { upsert: true }
 
     if (uploadError) {
       console.error("updateHeroContent: photo upload error", uploadError);
@@ -41,13 +42,23 @@ export async function updateHeroContent(formData: FormData) {
     }
   }
 
+  // Fetch the existing row so we can preserve the current photo_url if no new photo was uploaded.
+  // This is required because `upsert` replaces the ENTIRE row and would otherwise overwrite photo_url with NULL.
+  const { data: existing } = await supabase
+    .from("hero_content")
+    .select("photo_url")
+    .eq("id", "00000000-0000-0000-0000-000000000001")
+    .maybeSingle();
+
+  const final_photo_url = photo_url || existing?.photo_url || null;
+
   const update = {
     id: "00000000-0000-0000-0000-000000000001",
     headline_line1,
     headline_line2,
     bio,
     whatsapp_number,
-    ...(photo_url && { photo_url }),
+    photo_url: final_photo_url,
   };
 
   console.log("updateHeroContent: forcefully upserting →", update);
