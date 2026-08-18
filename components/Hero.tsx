@@ -27,56 +27,55 @@ export default function Hero({ headlineLine1, headlineLine2, bio, photoUrl, what
   const float4Ref = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    // ─── Entrance timeline ───
-    const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+    // ─── Entrance timeline (Slower, Cinematic) ───
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-    tl.fromTo(bgRedRef.current, { x: 500, scaleX: 0 }, { x: 0, scaleX: 1, duration: 0.6, ease: "expo.out" }, 0);
-    tl.fromTo(bgBlackRef.current, { x: -500, scaleX: 0 }, { x: 0, scaleX: 1, duration: 0.6, ease: "expo.out" }, 0.1);
+    tl.fromTo(bgRedRef.current, { x: 500, scaleX: 0 }, { x: 0, scaleX: 1, duration: 1.2, ease: "expo.out" }, 0);
+    tl.fromTo(bgBlackRef.current, { x: -500, scaleX: 0 }, { x: 0, scaleX: 1, duration: 1.2, ease: "expo.out" }, 0.2);
 
     tl.fromTo(
       headlineRef.current?.children as HTMLCollection,
-      { y: 100, opacity: 0, skewY: 10, scale: 0.8 },
-      { y: 0, opacity: 1, skewY: 0, scale: 1, duration: 0.5, stagger: 0.1, ease: "back.out(2)" },
-      0.3
+      { y: 150, opacity: 0, skewY: 15, scale: 0.9 },
+      { y: 0, opacity: 1, skewY: 0, scale: 1, duration: 1.0, stagger: 0.2, ease: "power4.out" },
+      0.4
     );
 
     tl.fromTo(textBlockRef.current,
-      { x: -100, opacity: 0, skewX: -20 },
-      { x: 0, opacity: 1, skewX: 0, duration: 0.5 },
-      0.5
+      { x: -150, opacity: 0, skewX: -20 },
+      { x: 0, opacity: 1, skewX: 0, duration: 1.2, ease: "power3.out" },
+      0.8
     );
 
     tl.fromTo(ctaRef.current,
-      { y: 50, opacity: 0, scale: 0.5 },
-      { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: "back.out(3)" },
-      0.7
+      { y: 50, opacity: 0, scale: 0.8 },
+      { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: "back.out(2)" },
+      1.1
     );
 
     if (photoRef.current) {
       tl.fromTo(photoRef.current,
-        { x: 120, opacity: 0, scale: 0.85, skewX: 15 },
-        { x: 0, opacity: 1, scale: 1, skewX: 0, duration: 0.6, ease: "expo.out" },
-        0.4
+        { x: 150, opacity: 0, scale: 0.9, skewX: 10 },
+        { x: 0, opacity: 1, scale: 1, skewX: 0, duration: 1.4, ease: "expo.out" },
+        0.5
       );
     }
 
-    // ─── Kinetic floating background elements ───
-    // Each element gets a different drift offset + yoyo loop for a living, breathing feel.
+    // ─── Kinetic floating background elements (Slower Drift) ───
     gsap.to(float1Ref.current, {
       y: -28, x: 12, rotate: 8,
-      duration: 3.2, ease: "sine.inOut", repeat: -1, yoyo: true,
+      duration: 6.2, ease: "sine.inOut", repeat: -1, yoyo: true,
     });
     gsap.to(float2Ref.current, {
       y: 20, x: -18, rotate: -6,
-      duration: 2.8, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 0.6,
+      duration: 5.8, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 1.0,
     });
     gsap.to(float3Ref.current, {
       y: -16, x: 8, rotate: 12,
-      duration: 4.1, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 1.2,
+      duration: 7.1, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 2.2,
     });
     gsap.to(float4Ref.current, {
       y: 24, x: -10, rotate: -10,
-      duration: 3.6, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 0.3,
+      duration: 6.6, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 1.3,
     });
 
   }, { scope: heroRef });
@@ -97,8 +96,19 @@ export default function Hero({ headlineLine1, headlineLine2, bio, photoUrl, what
     <section ref={heroRef} className="relative w-full min-h-[90vh] flex flex-col justify-center items-start px-6 md:px-16 overflow-hidden bg-p5-paper">
 
       {/* ── Kinetic Background Geometry ── */}
-      {/* Large diagonal slash behind everything */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        
+        {/* Halftone / Grid Pattern overlay */}
+        <div className="absolute inset-0 opacity-10 mix-blend-multiply" style={{
+          backgroundImage: 'radial-gradient(#121212 2px, transparent 2px)',
+          backgroundSize: '16px 16px'
+        }} />
+        
+        {/* Diagonal Comic Speed Lines */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, #121212 10px, #121212 12px)'
+        }} />
+
         {/* Slash stripe */}
         <div className="absolute top-0 right-0 w-[55%] h-full bg-p5-black/5 -skew-x-12 origin-top-right" />
 
