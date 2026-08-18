@@ -6,19 +6,8 @@ import { gsap } from "@/lib/gsap";
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
-  const [isTouchDevice, setIsTouchDevice] = useState(true); // Default true to prevent flash on mobile
 
   useEffect(() => {
-    // Check if device uses touch (no custom cursor needed)
-    const checkTouch = () => "ontouchstart" in window || navigator.maxTouchPoints > 0;
-    
-    if (checkTouch()) {
-      setIsTouchDevice(true);
-      return;
-    } else {
-      setIsTouchDevice(false);
-    }
-
     const cursor = cursorRef.current;
     const dot = dotRef.current;
     if (!cursor || !dot) return;
@@ -113,8 +102,6 @@ export default function CustomCursor() {
       window.removeEventListener("mouseup", handleMouseUp);
     };
   }, []);
-
-  if (isTouchDevice) return null;
 
   return (
     <>
