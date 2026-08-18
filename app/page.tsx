@@ -3,7 +3,7 @@ import Services from "@/components/Services";
 import ProjectCategoriesWrapper from "@/app/ProjectCategoriesWrapper";
 import LoadingScreen from "@/components/LoadingScreen";
 import ScrollProgress from "@/components/ScrollProgress";
-import PhanSiteTestimonials from "@/components/PhanSiteTestimonials";
+import TestimonialsWrapper from "@/app/TestimonialsWrapper";
 
 export default function Home() {
   return (
@@ -13,7 +13,7 @@ export default function Home() {
       <Hero />
       <Services />
       <ProjectCategoriesWrapper />
-      <PhanSiteTestimonials />
+      <TestimonialsWrapper />
     </main>
   );
 }

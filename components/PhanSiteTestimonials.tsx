@@ -3,29 +3,22 @@
 import React, { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 
-const testimonials = [
-  {
-    author: "Anon_01",
-    text: "Gila, web kelar cepet banget, desainnya ga pasaran! Recommended parah.",
-  },
-  {
-    author: "Mahasiswa_Stress",
-    text: "Tugas akhir gua bug-nya dibenerin cepet banget. Life saver!",
-  },
-  {
-    author: "Client_X",
-    text: "Presentasi PPT buat pitching tembus, desainnya emang bikin melek. Thanks bang!",
-  },
-];
+interface Testimonial {
+  author: string;
+  text: string;
+}
 
-export default function PhanSiteTestimonials() {
+interface PhanSiteTestimonialsProps {
+  testimonials: Testimonial[];
+}
+
+export default function PhanSiteTestimonials({ testimonials }: PhanSiteTestimonialsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     // Continuous upward scroll imitating a live forum
     const tl = gsap.timeline({ repeat: -1 });
-    
     tl.to(trackRef.current, {
       yPercent: -50, // scroll half since we duplicate the list
       ease: "none",

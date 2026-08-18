@@ -7,7 +7,7 @@ interface ProjectItem {
   id: string;
   title: string;
   status: string;
-  image_urls: string[];
+  image_urls: string[] | string | null;
   is_redacted: boolean;
 }
 
@@ -89,34 +89,54 @@ export default function DocumentViewer({ item, onClose }: DocumentViewerProps) {
 
         {/* Document Pages */}
         <div className="p-8 flex flex-col gap-8">
-          {item.image_urls && item.image_urls.length > 0 ? (
-            item.image_urls.map((url, i) => (
-              <div
-                key={i}
-                className="relative border-4 border-p5-black shadow-[8px_8px_0px_#121212] overflow-hidden"
-              >
-                {/* Page number */}
-                <div className="absolute top-2 right-2 bg-p5-black text-p5-red font-mono text-xs px-2 py-1 font-bold z-10">
-                  PAGE {i + 1}
+          {(() => {
+            // Normalize: Supabase TEXT[] may arrive as a real array, a stringified
+            // array, or null depending on the driver version.
+            let urls: string[] = [];
+            if (Array.isArray(item.image_urls)) {
+              urls = item.image_urls.filter(Boolean);
+            } else if (typeof item.image_urls === "string" && item.image_urls.length > 0) {
+              // e.g. "{url1,url2}" from older Supabase client
+              urls = (item.image_urls as string)
+                .replace(/^\{|\}$/g, "")
+                .split(",")
+                .map((s) => s.trim().replace(/^"|"$/g, ""))
+                .filter(Boolean);
+            }
+
+            return urls.length > 0 ? (
+              urls.map((url, i) => (
+                <div
+                  key={i}
+                  className="relative border-4 border-p5-black shadow-[8px_8px_0px_#121212] overflow-hidden"
+                >
+                  {/* Page number */}
+                  <div className="absolute top-2 right-2 bg-p5-black text-p5-red font-mono text-xs px-2 py-1 font-bold z-10">
+                    PAGE {i + 1}
+                  </div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={url}
+                    alt={`Document page ${i + 1}`}
+                    className="w-full h-auto block"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = "";
+                      e.currentTarget.parentElement!.classList.add("hidden");
+                    }}
+                  />
                 </div>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={url}
-                  alt={`Document page ${i + 1}`}
-                  className="w-full h-auto block"
-                />
+              ))
+            ) : (
+              <div className="border-4 border-dashed border-p5-black p-12 text-center">
+                <p className="font-mono font-black text-p5-black uppercase text-xl">
+                  [FILE CONTENTS REDACTED]
+                </p>
+                <p className="font-mono text-p5-black/50 text-sm mt-2">
+                  — Phantom Thieves Internal Use Only —
+                </p>
               </div>
-            ))
-          ) : (
-            <div className="border-4 border-dashed border-p5-black p-12 text-center">
-              <p className="font-mono font-black text-p5-black uppercase text-xl">
-                [FILE CONTENTS REDACTED]
-              </p>
-              <p className="font-mono text-p5-black/50 text-sm mt-2">
-                — Phantom Thieves Internal Use Only —
-              </p>
-            </div>
-          )}
+            );
+          })()}
         </div>
 
         {/* Document Footer */}

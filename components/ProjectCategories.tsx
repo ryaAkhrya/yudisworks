@@ -8,7 +8,7 @@ interface ProjectItem {
   id: string;
   title: string;
   status: string;
-  image_urls: string[];
+  image_urls: string[] | string | null;
   is_redacted: boolean;
 }
 
