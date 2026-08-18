@@ -120,10 +120,10 @@ export default function Hero({ headlineLine1, headlineLine2, bio, photoUrl, what
       <div ref={bgBlackRef} className="absolute top-40 right-4 md:right-40 w-32 h-16 bg-p5-black skew-p5 z-0 opacity-0 origin-left" />
 
       {/* ── Main content grid ── */}
-      <div className="relative z-10 w-full max-w-6xl flex flex-col md:flex-row items-center md:items-start gap-12">
+      <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-20">
 
         {/* Left: Text */}
-        <div className="flex-1 max-w-2xl">
+        <div className="flex-1 w-full lg:max-w-3xl flex flex-col justify-center">
           <h1
             ref={headlineRef}
             className="text-6xl md:text-8xl font-black uppercase tracking-tighter text-p5-black skew-p5 mb-6 leading-none"
@@ -158,9 +158,9 @@ export default function Hero({ headlineLine1, headlineLine2, bio, photoUrl, what
         </div>
 
         {/* Right: Profile Photo or geometric placeholder */}
-        <div ref={photoRef} className="flex-shrink-0 md:mt-12 relative w-full md:w-auto flex justify-center md:justify-end">
+        <div ref={photoRef} className="flex-shrink-0 relative w-full md:w-auto flex justify-center md:justify-end">
           {photoUrl ? (
-            <div className="relative border-8 border-p5-black shadow-[16px_16px_0px_#CE0000] -skew-y-3 overflow-hidden w-80 h-[28rem] md:w-[28rem] md:h-[40rem] lg:w-[32rem] lg:h-[45rem]">
+            <div className="relative border-8 border-p5-black shadow-[16px_16px_0px_#CE0000] -skew-y-3 overflow-hidden w-72 h-[28rem] md:w-[24rem] md:h-[34rem] lg:w-[28rem] lg:h-[38rem]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={photoUrl}
@@ -176,7 +176,7 @@ export default function Hero({ headlineLine1, headlineLine2, bio, photoUrl, what
             </div>
           ) : (
             // Geometric placeholder if no photo
-            <div className="relative w-80 h-[28rem] md:w-[28rem] md:h-[40rem] lg:w-[32rem] lg:h-[45rem]">
+            <div className="relative w-72 h-[28rem] md:w-[24rem] md:h-[34rem] lg:w-[28rem] lg:h-[38rem]">
               <div className="absolute inset-0 bg-p5-black border-8 border-p5-red shadow-[16px_16px_0px_#CE0000] -skew-y-3" />
               <div className="absolute top-8 left-8 right-8 h-1/2 bg-p5-red/20 border-4 border-p5-red skew-y-6" />
               <div className="absolute bottom-8 left-8 right-8 h-1/4 bg-p5-paper/10 border-4 border-p5-paper/30 -skew-y-3" />
