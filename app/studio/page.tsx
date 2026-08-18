@@ -6,6 +6,7 @@ import {
   deleteCategory,
   addProjectItem,
   deleteProjectItem,
+  updateHeroContent,
 } from "./actions";
 import { logout } from "./login/actions";
 import { createClient } from "@/utils/supabase/server";
@@ -22,10 +23,12 @@ export default async function StudioDashboard() {
     { data: testimonials },
     { data: categories },
     { data: projectItems },
+    { data: heroContent },
   ] = await Promise.all([
     supabase.from("testimonials").select("*").order("created_at", { ascending: false }),
     supabase.from("project_categories").select("*").order("created_at", { ascending: true }),
     supabase.from("project_items").select("*, project_categories(name)").order("created_at", { ascending: false }),
+    supabase.from("hero_content").select("id, headline_line1, headline_line2, bio, whatsapp_number, photo_url, created_at").limit(1).maybeSingle(),
   ]);
 
   const displayTestis = testimonials ?? [];
@@ -48,6 +51,73 @@ export default async function StudioDashboard() {
       </div>
 
       <div className="flex flex-col gap-12">
+
+        {/* ─── HERO SETTINGS ─── */}
+        <section className="bg-p5-red p-8 border-4 border-p5-black shadow-[12px_12px_0px_#121212]">
+          <h2 className="text-3xl font-black text-p5-paper uppercase mb-6 border-b-4 border-p5-black pb-2">
+            {"// Hero Settings"}
+          </h2>
+          <form action={updateHeroContent} key={heroContent?.id ?? "no-hero"} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="font-black text-p5-paper uppercase text-sm">Headline Line 1</label>
+              <input
+                name="headline_line1"
+                defaultValue={heroContent?.headline_line1 ?? "I'LL STEAL"}
+                required
+                className={inputCls}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="font-black text-p5-paper uppercase text-sm">Headline Line 2</label>
+              <input
+                name="headline_line2"
+                defaultValue={heroContent?.headline_line2 ?? "YOUR DEADLINES"}
+                required
+                className={inputCls}
+              />
+            </div>
+            <div className="flex flex-col gap-2 md:col-span-2">
+              <label className="font-black text-p5-paper uppercase text-sm">Bio Text</label>
+              <textarea
+                name="bio"
+                rows={3}
+                defaultValue={heroContent?.bio ?? ""}
+                required
+                className={inputCls}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="font-black text-p5-paper uppercase text-sm">WhatsApp Number</label>
+              <input
+                name="whatsapp_number"
+                defaultValue={heroContent?.whatsapp_number ?? "1234567890"}
+                placeholder="628xxxxxxxxxx"
+                required
+                className={inputCls}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="font-black text-p5-paper uppercase text-sm">Profile Photo / Character Graphic</label>
+              {heroContent?.photo_url && (
+                <div className="mb-2 border-4 border-p5-black w-20 h-20 overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={heroContent.photo_url} alt="Current photo" className="w-full h-full object-cover" />
+                </div>
+              )}
+              <input
+                name="photo"
+                type="file"
+                accept="image/*"
+                className="p-3 bg-p5-paper border-2 border-p5-black font-bold file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-p5-black file:text-p5-paper file:font-bold hover:file:bg-p5-red cursor-pointer"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <button type="submit" className="bg-p5-black text-p5-paper font-black uppercase text-xl py-3 px-8 border-4 border-p5-paper hover:-translate-y-1 transition-transform hover:bg-p5-paper hover:text-p5-black hover:border-p5-black">
+                Save Hero
+              </button>
+            </div>
+          </form>
+        </section>
 
         {/* ─── ROW 1: Categories + Project Items ─── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">

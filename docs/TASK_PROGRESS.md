@@ -8,3 +8,4 @@
 - [x] PHASE 6: The Control Room (Admin CMS)
 - [x] PHASE 7: Deployment
 - [x] REFACTOR: CMS + Public UI Architecture (ProjectCategories, DocumentViewer, 3-panel Studio CRUD)
+- [x] FEATURE SPRINT: DocumentViewer fallback card, Editable Hero CMS, kinetic GSAP background, dynamic testimonials

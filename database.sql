@@ -111,5 +111,8 @@ CREATE POLICY "hero_assets_public_read" ON storage.objects
 CREATE POLICY "hero_assets_auth_insert" ON storage.objects
   FOR INSERT WITH CHECK (bucket_id = 'hero-assets' AND auth.role() = 'authenticated');
 
+CREATE POLICY "hero_assets_auth_update" ON storage.objects
+  FOR UPDATE USING (bucket_id = 'hero-assets' AND auth.role() = 'authenticated');
+
 CREATE POLICY "hero_assets_auth_delete" ON storage.objects
   FOR DELETE USING (bucket_id = 'hero-assets' AND auth.role() = 'authenticated');

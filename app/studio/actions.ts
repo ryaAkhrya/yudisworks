@@ -4,8 +4,85 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
 
 // ─────────────────────────────────────────
-// TESTIMONIALS
+// HERO CONTENT
 // ─────────────────────────────────────────
+
+export async function updateHeroContent(formData: FormData) {
+  const supabase = await createClient();
+
+  const headline_line1 = (formData.get("headline_line1") as string)?.trim();
+  const headline_line2 = (formData.get("headline_line2") as string)?.trim();
+  const bio = (formData.get("bio") as string)?.trim();
+  const whatsapp_number = (formData.get("whatsapp_number") as string)?.trim();
+  const photo = formData.get("photo") as File;
+
+  // Guard: don't persist if required fields are empty
+  if (!headline_line1 || !headline_line2 || !bio || !whatsapp_number) {
+    console.error("updateHeroContent: Missing required fields", { headline_line1, headline_line2, bio, whatsapp_number });
+    return;
+  }
+
+  let photo_url: string | undefined;
+
+  if (photo && photo.size > 0) {
+    const fileName = `hero-${Date.now()}-${photo.name.replace(/\s/g, "_")}`;
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from("hero-assets")
+      .upload(fileName, photo, { upsert: true });
+
+    if (uploadError) {
+      console.error("updateHeroContent: photo upload error", uploadError);
+    } else if (uploadData) {
+      const { data: publicData } = supabase.storage
+        .from("hero-assets")
+        .getPublicUrl(uploadData.path);
+      photo_url = publicData.publicUrl;
+      console.log("updateHeroContent: photo uploaded →", photo_url);
+    }
+  }
+
+  const update: Record<string, string> = {
+    headline_line1,
+    headline_line2,
+    bio,
+    whatsapp_number,
+  };
+  if (photo_url) update.photo_url = photo_url;
+
+  console.log("updateHeroContent: persisting →", update);
+
+  // Deterministically fetch the very first row that exists (if any)
+  const { data: allRows, error: fetchErr } = await supabase
+    .from("hero_content")
+    .select("id")
+    .limit(1);
+
+  if (fetchErr) console.error("updateHeroContent: fetch error", fetchErr);
+
+  if (allRows && allRows.length > 0) {
+    const targetId = allRows[0].id;
+    const { error: updateErr } = await supabase
+      .from("hero_content")
+      .update(update)
+      .eq("id", targetId);
+    
+    if (updateErr) console.error("updateHeroContent: update error", updateErr);
+    else console.log("updateHeroContent: row updated ✓ ID:", targetId);
+  } else {
+    // Only insert if the table is completely empty (0 rows)
+    const { error: insertErr } = await supabase
+      .from("hero_content")
+      .insert([update]);
+      
+    if (insertErr) console.error("updateHeroContent: insert error", insertErr);
+    else console.log("updateHeroContent: fresh row inserted ✓");
+  }
+
+  revalidatePath("/");
+  revalidatePath("/studio");
+}
+
+
 
 export async function addTestimonial(formData: FormData) {
   const supabase = await createClient();

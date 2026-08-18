@@ -127,13 +127,45 @@ export default function DocumentViewer({ item, onClose }: DocumentViewerProps) {
                 </div>
               ))
             ) : (
-              <div className="border-4 border-dashed border-p5-black p-12 text-center">
-                <p className="font-mono font-black text-p5-black uppercase text-xl">
-                  [FILE CONTENTS REDACTED]
-                </p>
-                <p className="font-mono text-p5-black/50 text-sm mt-2">
-                  — Phantom Thieves Internal Use Only —
-                </p>
+              <div className="border-8 border-p5-black bg-p5-black p-0 shadow-[8px_8px_0px_#CE0000] relative overflow-hidden">
+                {/* Header bar */}
+                <div className="bg-p5-red px-6 py-3 border-b-4 border-p5-black flex items-center gap-3">
+                  <div className="w-3 h-3 bg-p5-paper" />
+                  <p className="font-mono font-black text-p5-paper uppercase text-xs tracking-widest">
+                    PHANTOM THIEVES ARCHIVE / FILE PREVIEW
+                  </p>
+                </div>
+                {/* Body */}
+                <div className="p-10 flex flex-col items-center text-center gap-6 relative">
+                  {/* Watermark diagonal text */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
+                    <span className="text-9xl font-black uppercase text-p5-red -rotate-12 whitespace-nowrap">
+                      CLASSIFIED
+                    </span>
+                  </div>
+                  {/* Stamp */}
+                  <div className="border-8 border-p5-red px-8 py-3 -rotate-6 relative z-10">
+                    <p className="font-mono font-black text-p5-red uppercase text-xl tracking-widest">
+                      CONFIDENTIAL
+                    </p>
+                    <p className="font-mono font-black text-p5-red uppercase text-xs tracking-widest mt-1">
+                      FILE PREVIEW
+                    </p>
+                  </div>
+                  {/* Title */}
+                  <div className="bg-p5-paper border-4 border-p5-black px-6 py-4 w-full max-w-sm shadow-[6px_6px_0px_#CE0000] relative z-10">
+                    <p className="font-mono text-p5-black/40 text-xs uppercase mb-2">Operation Title</p>
+                    <p className="font-black uppercase text-p5-black text-2xl leading-tight">
+                      {item.is_redacted
+                        ? <span className="bg-p5-black text-p5-black px-1 select-none">{item.title}</span>
+                        : item.title}
+                    </p>
+                  </div>
+                  {/* Footer note */}
+                  <p className="font-mono text-p5-paper/30 text-xs uppercase mt-2 relative z-10">
+                    — No document pages on file. Contact the admin. —
+                  </p>
+                </div>
               </div>
             );
           })()}
