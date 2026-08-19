@@ -69,9 +69,9 @@ export default function LoadingScreen() {
       {/* Jagged black banner */}
       <div 
         ref={bannerRef}
-        className="relative w-[120vw] h-[40vh] md:h-[50vh] bg-p5-black -skew-y-6 md:-skew-y-12 shadow-[20px_20px_0px_#F5F5F5] border-8 border-p5-paper flex items-center justify-center z-10"
+        className="relative w-[95vw] md:w-[120vw] h-[36vh] md:h-[50vh] bg-p5-black -skew-y-3 md:-skew-y-6 shadow-[12px_12px_0px_#F5F5F5] md:shadow-[20px_20px_0px_#F5F5F5] border-4 md:border-8 border-p5-paper flex items-center justify-center z-10 overflow-hidden"
       >
-        <h1 ref={textRef} className="text-5xl md:text-8xl font-black uppercase text-p5-red tracking-widest px-8 py-4 border-4 border-p5-red bg-p5-black shadow-[8px_8px_0px_#CE0000]">
+        <h1 ref={textRef} className="text-3xl sm:text-5xl md:text-8xl font-black uppercase text-p5-red tracking-widest px-4 py-3 md:px-8 md:py-4 border-4 border-p5-red bg-p5-black shadow-[4px_4px_0px_#CE0000] md:shadow-[8px_8px_0px_#CE0000] text-center">
           Take Your Time
         </h1>
       </div>

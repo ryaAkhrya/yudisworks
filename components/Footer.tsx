@@ -242,7 +242,7 @@ export default function Footer() {
         <div className="w-full h-px bg-p5-paper/10" />
 
         {/* ── Social + Nav grid ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-10 md:gap-y-16 gap-x-16">
 
           {/* Social Channels */}
           <div className="footer-socials flex flex-col gap-6">
@@ -293,7 +293,7 @@ export default function Footer() {
         <div className="w-full h-px bg-p5-paper/10" />
 
         {/* ── Copyright bar ── */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-2">
+        <div className="flex flex-col gap-6 md:flex-row md:items-center justify-between pb-6 md:pb-2">
           <p className="font-mono text-p5-paper/30 text-xs uppercase tracking-widest">
             © 2026 YUDISWORKS // PHANTOM FREELANCER.{" "}
             <span className="text-p5-red/50">
