@@ -4,6 +4,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import ScrollProgress from "@/components/ScrollProgress";
 import TestimonialsWrapper from "@/app/TestimonialsWrapper";
 import HeroWrapper from "@/app/HeroWrapper";
+import ConfidantFeedWrapper from "@/app/ConfidantFeedWrapper";
 
 export default function Home() {
   return (
@@ -14,6 +15,8 @@ export default function Home() {
       <Services />
       <ProjectCategoriesWrapper />
       <TestimonialsWrapper />
+      <ConfidantFeedWrapper />
     </main>
   );
 }
+

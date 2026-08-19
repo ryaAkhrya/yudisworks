@@ -176,3 +176,52 @@ export async function deleteProjectItem(id: string) {
   revalidatePath("/studio");
   revalidatePath("/");
 }
+
+// ─────────────────────────────────────────
+// CONFIDANT FEED
+// ─────────────────────────────────────────
+
+export async function addConfidantPost(formData: FormData) {
+  const supabase = await createClient();
+  const caption = (formData.get("caption") as string)?.trim() ?? "";
+  const image = formData.get("image") as File;
+
+  if (!image || image.size === 0) {
+    console.error("addConfidantPost: No image provided");
+    return;
+  }
+
+  // Unique filename → pure INSERT only (no upsert), bypasses RLS UPDATE restriction
+  const fileName = `feed-${Date.now()}-${image.name.replace(/\s/g, "_")}`;
+  const { data: uploadData, error: uploadError } = await supabase.storage
+    .from("feed-assets")
+    .upload(fileName, image);
+
+  if (uploadError || !uploadData) {
+    console.error("addConfidantPost: image upload error", uploadError);
+    return;
+  }
+
+  const { data: publicData } = supabase.storage
+    .from("feed-assets")
+    .getPublicUrl(uploadData.path);
+
+  const image_url = publicData.publicUrl;
+
+  const { error } = await supabase
+    .from("confidant_feed")
+    .insert([{ image_url, caption }]);
+
+  if (error) console.error("addConfidantPost: insert error", error);
+
+  revalidatePath("/studio");
+  revalidatePath("/");
+}
+
+export async function deleteConfidantPost(id: string) {
+  const supabase = await createClient();
+  await supabase.from("confidant_feed").delete().eq("id", id);
+  revalidatePath("/studio");
+  revalidatePath("/");
+}
+

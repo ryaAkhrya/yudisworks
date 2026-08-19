@@ -7,6 +7,8 @@ import {
   addProjectItem,
   deleteProjectItem,
   updateHeroContent,
+  addConfidantPost,
+  deleteConfidantPost,
 } from "./actions";
 import { logout } from "./login/actions";
 import { createClient } from "@/utils/supabase/server";
@@ -24,16 +26,19 @@ export default async function StudioDashboard() {
     { data: categories },
     { data: projectItems },
     { data: heroContent },
+    { data: confidantFeed },
   ] = await Promise.all([
     supabase.from("testimonials").select("*").order("created_at", { ascending: false }),
     supabase.from("project_categories").select("*").order("created_at", { ascending: true }),
     supabase.from("project_items").select("*, project_categories(name)").order("created_at", { ascending: false }),
     supabase.from("hero_content").select("id, headline_line1, headline_line2, bio, whatsapp_number, photo_url, created_at").eq("id", "00000000-0000-0000-0000-000000000001").maybeSingle(),
+    supabase.from("confidant_feed").select("*").order("created_at", { ascending: false }),
   ]);
 
   const displayTestis = testimonials ?? [];
   const displayCategories = categories ?? [];
   const displayItems = projectItems ?? [];
+  const displayFeed = confidantFeed ?? [];
 
   return (
     <div className="min-h-screen bg-p5-paper text-p5-black p-6 md:p-12 font-sans selection:bg-p5-red selection:text-p5-paper">
@@ -251,6 +256,84 @@ export default async function StudioDashboard() {
                     </div>
                     <form action={deleteTestimonial.bind(null, t.id)} className="ml-4 flex-shrink-0">
                       <button type="submit" className="bg-p5-red text-p5-paper font-black uppercase px-3 py-1 text-sm hover:bg-p5-paper hover:text-p5-black transition-colors">
+                        Purge
+                      </button>
+                    </form>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── ROW 3: Confidant Feed ─── */}
+        <section className="bg-p5-black p-8 border-4 border-p5-red shadow-[12px_12px_0px_#CE0000]">
+          <h2 className="text-3xl font-black text-p5-red uppercase mb-2 border-b-4 border-p5-red pb-2">
+            {"// Confidant Feed"}
+          </h2>
+          <p className="text-p5-paper/50 font-mono text-sm mb-6">
+            Visual transmissions broadcast to the Confidant Network section on the homepage.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {/* Upload Form */}
+            <form action={addConfidantPost} className="flex flex-col gap-4">
+              <label className="text-p5-paper font-black uppercase text-sm">Image</label>
+              <input
+                name="image"
+                type="file"
+                accept="image/*"
+                required
+                className="p-3 bg-p5-paper border-2 border-p5-red font-bold file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-p5-red file:text-p5-paper file:font-bold hover:file:bg-p5-paper hover:file:text-p5-black cursor-pointer"
+              />
+              <label className="text-p5-paper font-black uppercase text-sm">Caption / Transmission Log</label>
+              <textarea
+                name="caption"
+                placeholder="Describe the mission..."
+                rows={4}
+                className={inputDarkCls}
+              />
+              <button
+                type="submit"
+                className="mt-2 bg-p5-red text-p5-paper font-black uppercase text-xl py-3 border-4 border-p5-paper hover:-translate-y-1 transition-transform"
+              >
+                Transmit Post
+              </button>
+            </form>
+
+            {/* Existing Posts */}
+            <div>
+              <h3 className="text-xl font-black text-p5-paper uppercase mb-3">
+                Active Transmissions ({displayFeed.length})
+              </h3>
+              <ul className="flex flex-col gap-3 max-h-[500px] overflow-y-auto pr-1">
+                {displayFeed.length === 0 && (
+                  <li className="text-p5-paper/40 font-mono text-sm">No transmissions yet.</li>
+                )}
+                {displayFeed.map((post) => (
+                  <li key={post.id} className="flex gap-3 items-start bg-[#1a1a1a] p-3 border-l-8 border-p5-red">
+                    {/* Thumbnail */}
+                    <div className="flex-shrink-0 w-16 h-16 border-2 border-p5-red overflow-hidden">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={post.image_url}
+                        alt=""
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-p5-paper/80 text-sm font-mono truncate">
+                        {post.caption || <span className="italic opacity-40">[no caption]</span>}
+                      </p>
+                      <p className="text-p5-paper/30 text-xs font-mono mt-1">
+                        {new Date(post.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <form action={deleteConfidantPost.bind(null, post.id)} className="flex-shrink-0">
+                      <button
+                        type="submit"
+                        className="bg-p5-red text-p5-paper font-black uppercase px-3 py-1 text-sm hover:bg-p5-paper hover:text-p5-black transition-colors"
+                      >
                         Purge
                       </button>
                     </form>
