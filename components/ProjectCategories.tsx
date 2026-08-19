@@ -189,6 +189,7 @@ export default function ProjectCategories({
 
   return (
     <section
+      id="operations"
       ref={sectionRef}
       className="relative w-full py-24 px-6 md:px-16 bg-p5-paper overflow-hidden"
     >

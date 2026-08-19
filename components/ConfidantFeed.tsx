@@ -145,16 +145,17 @@ export default function ConfidantFeed({ posts }: ConfidantFeedProps) {
 
   return (
     <section
+      id="confidant-network"
       ref={sectionRef}
-      className="relative w-full bg-[#0a0a0a] py-24 px-6 md:px-16 overflow-hidden"
+      className="relative w-full bg-p5-paper py-24 px-6 md:px-16 overflow-hidden"
     >
       {/* ── Background: red grid lines ── */}
       <div
         className="absolute inset-0 pointer-events-none z-0"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(206,0,0,0.07) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(206,0,0,0.07) 1px, transparent 1px)
+            linear-gradient(rgba(18,18,18,0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(18,18,18,0.06) 1px, transparent 1px)
           `,
           backgroundSize: "48px 48px",
         }}
@@ -162,10 +163,10 @@ export default function ConfidantFeed({ posts }: ConfidantFeedProps) {
 
       {/* ── Diagonal speed stripe ── */}
       <div
-        className="absolute inset-0 pointer-events-none z-0 opacity-[0.03]"
+        className="absolute inset-0 pointer-events-none z-0 opacity-[0.025]"
         style={{
           backgroundImage:
-            "repeating-linear-gradient(45deg, transparent, transparent 8px, #CE0000 8px, #CE0000 10px)",
+            "repeating-linear-gradient(45deg, transparent, transparent 8px, #121212 8px, #121212 10px)",
         }}
       />
 
@@ -198,16 +199,16 @@ export default function ConfidantFeed({ posts }: ConfidantFeedProps) {
                 style={{ animation: "ping 1.5s cubic-bezier(0,0,0.2,1) infinite" }}
               />
             </div>
-            <p className="cf-sublabel font-mono text-p5-red text-xs uppercase tracking-[0.3em] opacity-0">
+            <p className="cf-sublabel font-mono text-p5-black text-xs uppercase tracking-[0.3em] opacity-0">
               CONFIDANT NETWORK — ACTIVE TRANSMISSIONS
             </p>
           </div>
 
-          <h2 className="cf-title text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter text-p5-paper leading-none opacity-0">
-            <span className="inline-block bg-p5-red text-p5-paper px-4 py-2 -skew-x-6 border-4 border-p5-paper shadow-[6px_6px_0px_#CE0000]">
+          <h2 className="cf-title text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter text-p5-black leading-none opacity-0">
+            <span className="inline-block bg-p5-red text-p5-paper px-4 py-2 -skew-x-6 border-4 border-p5-black shadow-[6px_6px_0px_#CE0000]">
               CONFIDANT
             </span>{" "}
-            <span className="inline-block text-p5-paper">NETWORK</span>
+            <span className="inline-block text-p5-black">NETWORK</span>
           </h2>
 
           <div
@@ -299,11 +300,11 @@ export default function ConfidantFeed({ posts }: ConfidantFeedProps) {
 
         {/* ── Footer decoration ── */}
         <div className="mt-16 flex items-center gap-4">
-          <div className="flex-1 h-px bg-p5-red/30" />
-          <p className="font-mono text-p5-red/40 text-xs uppercase tracking-[0.3em]">
+          <div className="flex-1 h-px bg-p5-black/20" />
+          <p className="font-mono text-p5-black/40 text-xs uppercase tracking-[0.3em]">
             END OF TRANSMISSION
           </p>
-          <div className="flex-1 h-px bg-p5-red/30" />
+          <div className="flex-1 h-px bg-p5-black/20" />
         </div>
       </div>
 

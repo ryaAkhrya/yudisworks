@@ -83,7 +83,7 @@ export default function Services() {
   };
 
   return (
-    <section ref={containerRef} className="relative w-full py-24 px-6 md:px-16 bg-p5-black overflow-hidden">
+    <section id="arsenal" ref={containerRef} className="relative w-full py-24 px-6 md:px-16 bg-p5-black overflow-hidden">
       
       <Marquee />
 

@@ -101,7 +101,7 @@ export default function Hero({ headlineLine1, headlineLine2, bio, photoUrl, what
   const waLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}`;
 
   return (
-    <section ref={heroRef} className="relative w-full min-h-[90vh] flex flex-col justify-center items-start px-6 md:px-16 overflow-hidden bg-p5-paper">
+    <section id="hero" ref={heroRef} className="relative w-full min-h-[90vh] flex flex-col justify-center items-start px-6 md:px-16 overflow-hidden bg-p5-paper">
 
       {/* ── Kinetic Background Geometry ── */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
