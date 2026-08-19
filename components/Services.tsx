@@ -40,37 +40,56 @@ export default function Services() {
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useGSAP(() => {
-    // Aggressive scroll animation for header
-    gsap.fromTo(headerRef.current,
-      { x: -300, opacity: 0, skewX: 20 },
-      {
-        x: 0, opacity: 1, skewX: 0,
-        duration: 0.6,
-        ease: "expo.out",
-        scrollTrigger: {
-          trigger: headerRef.current,
-          start: "top 80%",
-        }
-      }
-    );
+    const mm = gsap.matchMedia();
 
-    // Whip in for cards
-    cardsRef.current.forEach((card) => {
-      gsap.fromTo(card,
-        { y: 150, opacity: 0, scale: 0.8, skewY: 10 },
+    // ── Desktop: aggressive skew + scale whip-in ──
+    mm.add("(min-width: 768px)", () => {
+      gsap.fromTo(headerRef.current,
+        { x: -300, opacity: 0, skewX: 20 },
         {
-          y: 0, opacity: 1, scale: 1, skewY: 0,
-          duration: 0.5,
-          ease: "back.out(2.5)",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
-          }
+          x: 0, opacity: 1, skewX: 0,
+          duration: 0.6,
+          ease: "expo.out",
+          scrollTrigger: { trigger: headerRef.current, start: "top 80%" },
         }
       );
+      cardsRef.current.forEach((card) => {
+        gsap.fromTo(card,
+          { y: 150, opacity: 0, scale: 0.8, skewY: 10 },
+          {
+            y: 0, opacity: 1, scale: 1, skewY: 0,
+            duration: 0.5, ease: "back.out(2.5)",
+            scrollTrigger: { trigger: card, start: "top 85%" },
+          }
+        );
+      });
     });
 
+    // ── Mobile: simple fade + translate ──
+    mm.add("(max-width: 767px)", () => {
+      gsap.fromTo(headerRef.current,
+        { y: 30, opacity: 0 },
+        {
+          y: 0, opacity: 1,
+          duration: 0.5, ease: "power2.out",
+          scrollTrigger: { trigger: headerRef.current, start: "top 85%" },
+        }
+      );
+      cardsRef.current.forEach((card) => {
+        gsap.fromTo(card,
+          { y: 40, opacity: 0 },
+          {
+            y: 0, opacity: 1,
+            duration: 0.45, ease: "power2.out",
+            scrollTrigger: { trigger: card, start: "top 88%" },
+          }
+        );
+      });
+    });
+
+    return () => mm.revert();
   }, { scope: containerRef });
+
 
   const handleHover = (e: React.MouseEvent<HTMLDivElement>) => {
     gsap.to(e.currentTarget, {

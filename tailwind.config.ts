@@ -13,6 +13,10 @@ const config: Config = {
         "p5-black": "#121212",
         "p5-paper": "#F5F5F5",
       },
+      fontFamily: {
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        display: ["var(--font-bebas)", "Impact", "sans-serif"],
+      },
       keyframes: {
         float: {
           '0%, 100%': { transform: 'translateY(0)' },

@@ -1,6 +1,24 @@
 import type { Metadata } from "next";
+import { Inter, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
+
+// Inter: body copy — display:swap prevents FOUT, preload:true reduces LCP penalty
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+  preload: true,
+});
+
+// Bebas Neue: the big P5 display headings
+const bebasNeue = Bebas_Neue({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-bebas",
+  preload: true,
+});
 
 export const metadata: Metadata = {
   title: "Phantom Freelancer",
@@ -13,12 +31,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased selection:bg-p5-red selection:text-p5-paper">
-      <body className="min-h-full flex flex-col font-sans overflow-x-hidden p5-paper bg-[#F5F5F5] text-p5-black">
+    <html
+      lang="en"
+      className={`h-full antialiased selection:bg-p5-red selection:text-p5-paper overflow-x-hidden ${inter.variable} ${bebasNeue.variable}`}
+    >
+      <body className="min-h-full flex flex-col font-sans overflow-x-hidden bg-[#F5F5F5] text-p5-black">
         <CustomCursor />
-        {/* Anti-Slop Layout Constraint: No standard navbars. Aggressive, chaotic background */}
         {children}
       </body>
     </html>
   );
 }
+

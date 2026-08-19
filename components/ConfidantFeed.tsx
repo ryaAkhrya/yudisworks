@@ -25,116 +25,70 @@ export default function ConfidantFeed({ posts }: ConfidantFeedProps) {
     () => {
       if (posts.length === 0) return;
 
-      // ── Section title entrance ──
-      gsap.fromTo(
-        ".cf-title",
-        { x: -120, opacity: 0, skewX: -18 },
-        {
-          x: 0,
-          opacity: 1,
-          skewX: 0,
-          duration: 1.0,
-          ease: "expo.out",
-          scrollTrigger: {
-            trigger: ".cf-title",
-            start: "top 88%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+      const mm = gsap.matchMedia();
 
-      // ── Decorative red line wipe ──
-      gsap.fromTo(
-        ".cf-line",
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          duration: 0.8,
-          ease: "power3.out",
-          transformOrigin: "left center",
-          scrollTrigger: {
-            trigger: ".cf-line",
-            start: "top 88%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-
-      // ── Sub-label fade ──
-      gsap.fromTo(
-        ".cf-sublabel",
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.7,
-          ease: "power2.out",
-          delay: 0.3,
-          scrollTrigger: {
-            trigger: ".cf-sublabel",
-            start: "top 90%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-
-      // ── Individual card pop-in ──
-      document.querySelectorAll(".confidant-card").forEach((card, i) => {
-        const tiltAngle = CARD_TILTS[i % CARD_TILTS.length];
-        // Start with extra exaggerated tilt, slide in from bottom
-        gsap.fromTo(
-          card,
-          {
-            opacity: 0,
-            y: 90,
-            rotate: tiltAngle + (tiltAngle > 0 ? 14 : -14),
-            scale: 0.85,
-          },
-          {
-            opacity: 1,
-            y: 0,
-            rotate: tiltAngle,
-            scale: 1,
-            duration: 0.9,
-            ease: "back.out(1.6)",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 90%",
-              toggleActions: "play none none none",
-            },
-          }
+      // ── Desktop: full tilt pop-in + float + header animations ──
+      mm.add("(min-width: 768px)", () => {
+        gsap.fromTo(".cf-title",
+          { x: -120, opacity: 0, skewX: -18 },
+          { x: 0, opacity: 1, skewX: 0, duration: 1.0, ease: "expo.out",
+            scrollTrigger: { trigger: ".cf-title", start: "top 88%", toggleActions: "play none none none" } }
         );
+        gsap.fromTo(".cf-line",
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.8, ease: "power3.out", transformOrigin: "left center",
+            scrollTrigger: { trigger: ".cf-line", start: "top 88%", toggleActions: "play none none none" } }
+        );
+        gsap.fromTo(".cf-sublabel",
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7, ease: "power2.out", delay: 0.3,
+            scrollTrigger: { trigger: ".cf-sublabel", start: "top 90%", toggleActions: "play none none none" } }
+        );
+        document.querySelectorAll(".confidant-card").forEach((card, i) => {
+          const tiltAngle = CARD_TILTS[i % CARD_TILTS.length];
+          gsap.fromTo(card,
+            { opacity: 0, y: 90, rotate: tiltAngle + (tiltAngle > 0 ? 14 : -14), scale: 0.85 },
+            { opacity: 1, y: 0, rotate: tiltAngle, scale: 1, duration: 0.9, ease: "back.out(1.6)",
+              scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none none" } }
+          );
+          gsap.to(card, {
+            y: i % 2 === 0 ? -6 : 6,
+            duration: 3.5 + i * 0.4, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 1.2 + i * 0.15,
+          });
+        });
+        gsap.fromTo(".cf-glitch",
+          { scaleX: 0, opacity: 0 },
+          { scaleX: 1, opacity: 1, duration: 0.4, stagger: 0.08, ease: "power2.out",
+            scrollTrigger: { trigger: ".cf-glitch", start: "top 85%", toggleActions: "play none none none" } }
+        );
+      });
 
-        // Subtle perpetual float after entrance
-        gsap.to(card, {
-          y: i % 2 === 0 ? -6 : 6,
-          duration: 3.5 + i * 0.4,
-          ease: "sine.inOut",
-          repeat: -1,
-          yoyo: true,
-          delay: 1.2 + i * 0.15,
+      // ── Mobile: simple fade-in only — no tilt physics, no perpetual float ──
+      mm.add("(max-width: 767px)", () => {
+        gsap.fromTo(".cf-title",
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: "power2.out",
+            scrollTrigger: { trigger: ".cf-title", start: "top 88%", toggleActions: "play none none none" } }
+        );
+        gsap.fromTo(".cf-sublabel",
+          { opacity: 0 },
+          { opacity: 1, duration: 0.5, ease: "power2.out", delay: 0.15,
+            scrollTrigger: { trigger: ".cf-sublabel", start: "top 90%", toggleActions: "play none none none" } }
+        );
+        document.querySelectorAll(".confidant-card").forEach((card, i) => {
+          // Keep the resting tilt from the start — only fade in
+          const tiltAngle = CARD_TILTS[i % CARD_TILTS.length];
+          gsap.set(card, { rotate: tiltAngle });
+          gsap.fromTo(card,
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.45, ease: "power2.out",
+              scrollTrigger: { trigger: card, start: "top 92%", toggleActions: "play none none none" } }
+          );
         });
       });
 
-      // ── Glitch lines decoration ──
-      gsap.fromTo(
-        ".cf-glitch",
-        { scaleX: 0, opacity: 0 },
-        {
-          scaleX: 1,
-          opacity: 1,
-          duration: 0.4,
-          stagger: 0.08,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: ".cf-glitch",
-            start: "top 85%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-
       return () => {
+        mm.revert();
         ScrollTrigger.getAll().forEach((t) => t.kill());
       };
     },
@@ -218,7 +172,8 @@ export default function ConfidantFeed({ posts }: ConfidantFeedProps) {
         </div>
 
         {/* ── Feed Grid: calling-card wall ── */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-8 space-y-8">
+        {/* Single column on mobile so cards aren't tiny/oversized; multi-col on larger screens */}
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-10 md:space-y-8">
           {posts.map((post, i) => {
             const tilt = CARD_TILTS[i % CARD_TILTS.length];
             const isFirst = i === 0;
@@ -241,8 +196,8 @@ export default function ConfidantFeed({ posts }: ConfidantFeedProps) {
                     #{String(i + 1).padStart(2, "0")}
                   </div>
 
-                  {/* Image */}
-                  <div className="relative w-full aspect-[4/5] overflow-hidden">
+                  {/* Image — relaxed aspect ratio on mobile */}
+                  <div className="relative w-full aspect-[4/3] md:aspect-[4/5] overflow-hidden">
                     <Image
                       src={post.image_url}
                       alt={post.caption || `Confidant Network post ${i + 1}`}

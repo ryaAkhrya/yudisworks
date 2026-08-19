@@ -115,84 +115,62 @@ export default function Footer() {
 
   useGSAP(
     () => {
-      // Headline slam
-      gsap.fromTo(
-        ".footer-headline",
-        { y: 80, opacity: 0, skewY: 6, scale: 0.92 },
-        {
-          y: 0, opacity: 1, skewY: 0, scale: 1,
-          duration: 1.0, ease: "expo.out",
-          scrollTrigger: {
-            trigger: ".footer-headline",
-            start: "top 88%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+      const mm = gsap.matchMedia();
 
-      // Sub-headline
-      gsap.fromTo(
-        ".footer-sub",
-        { x: -60, opacity: 0 },
-        {
-          x: 0, opacity: 1,
-          duration: 0.8, ease: "power3.out", delay: 0.2,
-          scrollTrigger: {
-            trigger: ".footer-sub",
-            start: "top 90%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+      // ── Desktop: full stagger cascade ──
+      mm.add("(min-width: 768px)", () => {
+        gsap.fromTo(".footer-headline",
+          { y: 80, opacity: 0, skewY: 6, scale: 0.92 },
+          { y: 0, opacity: 1, skewY: 0, scale: 1, duration: 1.0, ease: "expo.out",
+            scrollTrigger: { trigger: ".footer-headline", start: "top 88%", toggleActions: "play none none none" } }
+        );
+        gsap.fromTo(".footer-sub",
+          { x: -60, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.2,
+            scrollTrigger: { trigger: ".footer-sub", start: "top 90%", toggleActions: "play none none none" } }
+        );
+        gsap.fromTo(".footer-social-btn",
+          { y: 40, opacity: 0, rotate: 12, scale: 0.8 },
+          { y: 0, opacity: 1, rotate: 0, scale: 1, duration: 0.55, ease: "back.out(2)", stagger: 0.08,
+            scrollTrigger: { trigger: ".footer-socials", start: "top 88%", toggleActions: "play none none none" } }
+        );
+        gsap.fromTo(".footer-nav-link",
+          { x: -50, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.5, ease: "power3.out", stagger: 0.07,
+            scrollTrigger: { trigger: ".footer-nav", start: "top 88%", toggleActions: "play none none none" } }
+        );
+        gsap.fromTo(".footer-wipe",
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.9, ease: "power3.out", transformOrigin: "left center", stagger: 0.1,
+            scrollTrigger: { trigger: footerRef.current, start: "top 90%", toggleActions: "play none none none" } }
+        );
+      });
 
-      // Social buttons cascade
-      gsap.fromTo(
-        ".footer-social-btn",
-        { y: 40, opacity: 0, rotate: 12, scale: 0.8 },
-        {
-          y: 0, opacity: 1, rotate: 0, scale: 1,
-          duration: 0.55, ease: "back.out(2)",
-          stagger: 0.08,
-          scrollTrigger: {
-            trigger: ".footer-socials",
-            start: "top 88%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+      // ── Mobile: simple fades only ──
+      mm.add("(max-width: 767px)", () => {
+        gsap.fromTo(".footer-headline",
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, ease: "power2.out",
+            scrollTrigger: { trigger: ".footer-headline", start: "top 88%", toggleActions: "play none none none" } }
+        );
+        gsap.fromTo(".footer-sub",
+          { opacity: 0 },
+          { opacity: 1, duration: 0.5, ease: "power2.out",
+            scrollTrigger: { trigger: ".footer-sub", start: "top 90%", toggleActions: "play none none none" } }
+        );
+        gsap.fromTo(".footer-social-btn",
+          { opacity: 0 },
+          { opacity: 1, duration: 0.4, stagger: 0.05, ease: "power2.out",
+            scrollTrigger: { trigger: ".footer-socials", start: "top 88%", toggleActions: "play none none none" } }
+        );
+        gsap.fromTo(".footer-nav-link",
+          { opacity: 0 },
+          { opacity: 1, duration: 0.4, stagger: 0.05, ease: "power2.out",
+            scrollTrigger: { trigger: ".footer-nav", start: "top 90%", toggleActions: "play none none none" } }
+        );
+      });
 
-      // Nav links slide in
-      gsap.fromTo(
-        ".footer-nav-link",
-        { x: -50, opacity: 0 },
-        {
-          x: 0, opacity: 1,
-          duration: 0.5, ease: "power3.out",
-          stagger: 0.07,
-          scrollTrigger: {
-            trigger: ".footer-nav",
-            start: "top 88%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-
-      // Red wipe lines
-      gsap.fromTo(
-        ".footer-wipe",
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          duration: 0.9, ease: "power3.out",
-          transformOrigin: "left center",
-          stagger: 0.1,
-          scrollTrigger: {
-            trigger: footerRef.current,
-            start: "top 90%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+      return () => mm.revert();
     },
     { scope: footerRef }
   );
@@ -280,7 +258,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   title={s.label}
-                  className={`footer-social-btn group relative flex items-center gap-3 bg-p5-paper text-p5-black font-black uppercase text-sm px-5 py-3 border-4 border-p5-black shadow-[4px_4px_0px_#CE0000] ${s.tilt} hover:bg-p5-red hover:text-p5-paper hover:border-p5-paper hover:shadow-[6px_6px_0px_#121212] hover:-translate-y-1 transition-all duration-150`}
+                  className={`footer-social-btn group relative flex items-center gap-3 bg-p5-paper text-p5-black font-black uppercase text-sm px-5 min-h-[44px] min-w-[44px] border-4 border-p5-black shadow-[4px_4px_0px_#CE0000] ${s.tilt} hover:bg-p5-red hover:text-p5-paper hover:border-p5-paper hover:shadow-[6px_6px_0px_#121212] hover:-translate-y-1 transition-all duration-150`}
                 >
                   <span className="flex-shrink-0 transition-transform duration-150 group-hover:scale-110">
                     {s.icon}
@@ -301,7 +279,7 @@ export default function Footer() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="footer-nav-link group inline-flex items-center gap-3 font-black uppercase text-p5-paper/70 hover:text-p5-red transition-colors duration-150 text-lg tracking-tight opacity-0"
+                  className="footer-nav-link group inline-flex items-center gap-3 font-black uppercase text-p5-paper/70 hover:text-p5-red transition-colors duration-150 text-lg tracking-tight opacity-0 min-h-[44px]"
                 >
                   <span className="w-0 group-hover:w-6 h-[3px] bg-p5-red transition-all duration-200 ease-out" />
                   {link.label}
