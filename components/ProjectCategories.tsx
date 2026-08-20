@@ -58,10 +58,10 @@ function CategoryCard({
 
   const offsetClass =
     index === 0
-      ? "md:ml-0"
+      ? "mb-12 md:mb-0 md:ml-0"
       : index === 1
-      ? "md:ml-24 md:mt-12"
-      : "md:ml-8 md:mt-24";
+      ? "mb-12 md:mb-0 md:ml-24 md:mt-12"
+      : "mb-12 md:mb-0 md:ml-8 md:mt-24";
 
   return (
     <>
@@ -72,41 +72,41 @@ function CategoryCard({
         {/* Category Card Header — clickable */}
         <button
           onClick={toggleOpen}
-          className="w-full text-left bg-p5-paper border-8 border-p5-black shadow-[12px_12px_0px_#121212] skew-p5 p-8 group hover:bg-p5-black transition-colors duration-0 focus:outline-none"
+          className="w-full text-left bg-p5-paper border-8 border-p5-black shadow-[12px_12px_0px_#121212] skew-p5 p-6 sm:p-8 md:p-10 group hover:bg-p5-black transition-colors duration-0 focus:outline-none"
         >
           {/* Accent corner block */}
           <div
-            className="absolute -top-4 -left-4 w-12 h-12 border-4 border-p5-black"
+            className="absolute -top-4 -left-4 md:-top-5 md:-left-5 w-10 h-10 md:w-12 md:h-12 border-4 border-p5-black"
             style={{ backgroundColor: category.accent_color }}
           />
 
-          <div className="flex justify-between items-start">
+          <div className="flex justify-between items-start relative z-10 mt-3 md:mt-0">
             <div>
               <p
-                className="font-mono text-xs uppercase tracking-widest mb-2 group-hover:text-p5-paper"
+                className="font-mono text-xs sm:text-sm uppercase tracking-widest mb-2 group-hover:text-p5-paper"
                 style={{ color: category.accent_color }}
               >
                 {"// OPERATION TYPE"}
               </p>
-              <h3 className="text-3xl md:text-4xl font-black uppercase text-p5-black group-hover:text-p5-paper leading-tight">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase text-p5-black group-hover:text-p5-paper leading-tight">
                 {category.name}
               </h3>
               {category.description && (
-                <p className="mt-3 font-bold text-p5-black/70 group-hover:text-p5-paper/70">
+                <p className="mt-3 font-bold text-sm md:text-base text-p5-black/70 group-hover:text-p5-paper/70">
                   {category.description}
                 </p>
               )}
             </div>
             <div
-              className="text-4xl font-black ml-6 mt-1 flex-shrink-0 transition-transform duration-200 group-hover:text-p5-paper"
+              className="text-2xl md:text-4xl font-black ml-4 md:ml-6 mt-1 pr-2 md:pr-0 flex-shrink-0 transition-transform duration-200 group-hover:text-p5-paper"
               style={{ transform: isOpen ? "rotate(45deg)" : "rotate(0deg)" }}
             >
               +
             </div>
           </div>
 
-          <div className="mt-4 border-t-4 border-dashed border-p5-black/30 group-hover:border-p5-paper/30 pt-3">
-            <p className="font-mono text-sm font-bold group-hover:text-p5-paper text-p5-black">
+          <div className="mt-4 border-t-4 border-dashed border-p5-black/30 group-hover:border-p5-paper/30 pt-3 relative z-10">
+            <p className="font-mono text-xs md:text-sm font-bold group-hover:text-p5-paper text-p5-black">
               {category.project_items.length} FILE
               {category.project_items.length !== 1 ? "S" : ""} ON RECORD
             </p>
@@ -191,13 +191,13 @@ export default function ProjectCategories({
     <section
       id="operations"
       ref={sectionRef}
-      className="relative w-full py-24 px-6 md:px-16 bg-p5-paper overflow-hidden"
+      className="relative w-full py-20 md:py-24 px-8 sm:px-10 md:px-16 bg-p5-paper overflow-hidden"
     >
       <div className="relative z-10 max-w-6xl mx-auto">
-        <div className="mb-16 flex justify-end">
+        <div className="mb-12 mt-8 md:mt-0 md:mb-16 flex justify-end">
           <h2
             ref={headerRef}
-            className="inline-block bg-p5-red text-p5-paper text-5xl md:text-7xl font-black uppercase px-6 py-2 -skew-y-3 border-4 border-p5-black shadow-[8px_8px_0px_#121212]"
+            className="inline-block bg-p5-red text-p5-paper text-3xl sm:text-4xl md:text-7xl font-black uppercase px-4 sm:px-6 py-2 -skew-y-3 border-4 border-p5-black shadow-[8px_8px_0px_#121212]"
           >
             The Operations
           </h2>
@@ -213,7 +213,7 @@ export default function ProjectCategories({
             </p>
           </div>
         ) : (
-          <div className="flex flex-col gap-8 md:gap-0 mt-4">
+          <div className="flex flex-col md:gap-0 mt-4">
             {categories.map((cat, index) => (
               <CategoryCard key={cat.id} category={cat} index={index} />
             ))}
