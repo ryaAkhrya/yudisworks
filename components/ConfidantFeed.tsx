@@ -154,15 +154,15 @@ export default function ConfidantFeed({ posts }: ConfidantFeedProps) {
               />
             </div>
             <p className="cf-sublabel font-mono text-p5-black text-xs uppercase tracking-[0.3em] opacity-0">
-              CONFIDANT NETWORK — ACTIVE TRANSMISSIONS
+              DESIGN PORTFOLIO — ACTIVE TRANSMISSIONS
             </p>
           </div>
 
           <h2 className="cf-title text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter text-p5-black leading-none opacity-0">
             <span className="inline-block bg-p5-red text-p5-paper px-4 py-2 -skew-x-6 border-4 border-p5-black shadow-[6px_6px_0px_#CE0000]">
-              CONFIDANT
+              DESIGN
             </span>{" "}
-            <span className="inline-block text-p5-black">NETWORK</span>
+            <span className="inline-block text-p5-black">THAT I DO</span>
           </h2>
 
           <div

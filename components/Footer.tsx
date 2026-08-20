@@ -59,7 +59,7 @@ const NAV_LINKS = [
   { label: "// HERO", href: "#hero" },
   { label: "// THE ARSENAL", href: "#arsenal" },
   { label: "// THE OPERATIONS", href: "#operations" },
-  { label: "// CONFIDANT NETWORK", href: "#confidant-network" },
+  { label: "// DESIGN THAT I DO", href: "#confidant-network" },
   { label: "// PHAN-SITE", href: "#phan-site" },
 ];
 
@@ -67,14 +67,14 @@ const SOCIAL_LINKS = [
   {
     id: "footer-tiktok",
     label: "TikTok",
-    href: "https://www.tiktok.com/@yudisworks",
+    href: "https://www.tiktok.com/@guayudis",
     icon: <IconTikTok />,
     tilt: "-rotate-2",
   },
   {
     id: "footer-instagram",
     label: "Instagram",
-    href: "https://www.instagram.com/yudisworks",
+    href: "https://www.instagram.com/distira.wav",
     icon: <IconInstagram />,
     tilt: "rotate-1",
   },
@@ -88,21 +88,21 @@ const SOCIAL_LINKS = [
   {
     id: "footer-spotify",
     label: "Spotify",
-    href: "https://open.spotify.com/user/yudisworks",
+    href: "https://open.spotify.com/artist/2kFEpJnB2Lhxq8XGIy8Qs0",
     icon: <IconSpotify />,
     tilt: "rotate-2",
   },
   {
     id: "footer-whatsapp",
     label: "WhatsApp",
-    href: "https://wa.me/628",
+    href: "https://wa.me/6282124624301",
     icon: <IconWhatsApp />,
     tilt: "-rotate-3",
   },
   {
     id: "footer-email",
     label: "Email",
-    href: "mailto:hello@yudisworks.com",
+    href: "yudistirabayuputra2004@gmail.com",
     icon: <IconEmail />,
     tilt: "rotate-3",
   },
@@ -121,28 +121,38 @@ export default function Footer() {
       mm.add("(min-width: 768px)", () => {
         gsap.fromTo(".footer-headline",
           { y: 80, opacity: 0, skewY: 6, scale: 0.92 },
-          { y: 0, opacity: 1, skewY: 0, scale: 1, duration: 1.0, ease: "expo.out",
-            scrollTrigger: { trigger: ".footer-headline", start: "top 88%", toggleActions: "play none none none" } }
+          {
+            y: 0, opacity: 1, skewY: 0, scale: 1, duration: 1.0, ease: "expo.out",
+            scrollTrigger: { trigger: ".footer-headline", start: "top 88%", toggleActions: "play none none none" }
+          }
         );
         gsap.fromTo(".footer-sub",
           { x: -60, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.2,
-            scrollTrigger: { trigger: ".footer-sub", start: "top 90%", toggleActions: "play none none none" } }
+          {
+            x: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.2,
+            scrollTrigger: { trigger: ".footer-sub", start: "top 90%", toggleActions: "play none none none" }
+          }
         );
         gsap.fromTo(".footer-social-btn",
           { y: 40, opacity: 0, rotate: 12, scale: 0.8 },
-          { y: 0, opacity: 1, rotate: 0, scale: 1, duration: 0.55, ease: "back.out(2)", stagger: 0.08,
-            scrollTrigger: { trigger: ".footer-socials", start: "top 88%", toggleActions: "play none none none" } }
+          {
+            y: 0, opacity: 1, rotate: 0, scale: 1, duration: 0.55, ease: "back.out(2)", stagger: 0.08,
+            scrollTrigger: { trigger: ".footer-socials", start: "top 88%", toggleActions: "play none none none" }
+          }
         );
         gsap.fromTo(".footer-nav-link",
           { x: -50, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.5, ease: "power3.out", stagger: 0.07,
-            scrollTrigger: { trigger: ".footer-nav", start: "top 88%", toggleActions: "play none none none" } }
+          {
+            x: 0, opacity: 1, duration: 0.5, ease: "power3.out", stagger: 0.07,
+            scrollTrigger: { trigger: ".footer-nav", start: "top 88%", toggleActions: "play none none none" }
+          }
         );
         gsap.fromTo(".footer-wipe",
           { scaleX: 0 },
-          { scaleX: 1, duration: 0.9, ease: "power3.out", transformOrigin: "left center", stagger: 0.1,
-            scrollTrigger: { trigger: footerRef.current, start: "top 90%", toggleActions: "play none none none" } }
+          {
+            scaleX: 1, duration: 0.9, ease: "power3.out", transformOrigin: "left center", stagger: 0.1,
+            scrollTrigger: { trigger: footerRef.current, start: "top 90%", toggleActions: "play none none none" }
+          }
         );
       });
 
@@ -150,23 +160,31 @@ export default function Footer() {
       mm.add("(max-width: 767px)", () => {
         gsap.fromTo(".footer-headline",
           { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: "power2.out",
-            scrollTrigger: { trigger: ".footer-headline", start: "top 88%", toggleActions: "play none none none" } }
+          {
+            y: 0, opacity: 1, duration: 0.6, ease: "power2.out",
+            scrollTrigger: { trigger: ".footer-headline", start: "top 88%", toggleActions: "play none none none" }
+          }
         );
         gsap.fromTo(".footer-sub",
           { opacity: 0 },
-          { opacity: 1, duration: 0.5, ease: "power2.out",
-            scrollTrigger: { trigger: ".footer-sub", start: "top 90%", toggleActions: "play none none none" } }
+          {
+            opacity: 1, duration: 0.5, ease: "power2.out",
+            scrollTrigger: { trigger: ".footer-sub", start: "top 90%", toggleActions: "play none none none" }
+          }
         );
         gsap.fromTo(".footer-social-btn",
           { opacity: 0 },
-          { opacity: 1, duration: 0.4, stagger: 0.05, ease: "power2.out",
-            scrollTrigger: { trigger: ".footer-socials", start: "top 88%", toggleActions: "play none none none" } }
+          {
+            opacity: 1, duration: 0.4, stagger: 0.05, ease: "power2.out",
+            scrollTrigger: { trigger: ".footer-socials", start: "top 88%", toggleActions: "play none none none" }
+          }
         );
         gsap.fromTo(".footer-nav-link",
           { opacity: 0 },
-          { opacity: 1, duration: 0.4, stagger: 0.05, ease: "power2.out",
-            scrollTrigger: { trigger: ".footer-nav", start: "top 90%", toggleActions: "play none none none" } }
+          {
+            opacity: 1, duration: 0.4, stagger: 0.05, ease: "power2.out",
+            scrollTrigger: { trigger: ".footer-nav", start: "top 90%", toggleActions: "play none none none" }
+          }
         );
       });
 
@@ -208,11 +226,11 @@ export default function Footer() {
       </div>
 
       {/* ── Corner brackets ── */}
-      <div className="absolute bottom-12 right-12 w-12 h-12 border-b-4 border-r-4 border-p5-red opacity-40 z-10 pointer-events-none" />
-      <div className="absolute bottom-12 left-12 w-12 h-12 border-b-4 border-l-4 border-p5-red opacity-40 z-10 pointer-events-none" />
+      <div className="hidden md:block absolute bottom-12 right-12 w-12 h-12 border-b-4 border-r-4 border-p5-red opacity-40 z-10 pointer-events-none" />
+      <div className="hidden md:block absolute bottom-12 left-12 w-12 h-12 border-b-4 border-l-4 border-p5-red opacity-40 z-10 pointer-events-none" />
 
       {/* ── Main content ── */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16 pt-20 pb-8 flex flex-col gap-16">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16 pt-20 pb-12 flex flex-col gap-16">
 
         {/* ── Hero text block ── */}
         <div className="flex flex-col gap-6 max-w-5xl">
@@ -300,8 +318,8 @@ export default function Footer() {
               BUILT WITH NEXT.JS &amp; SUPABASE.
             </span>
           </p>
-          {/* Phantom Thieves stamp */}
-          <div className="flex-shrink-0 border-2 border-p5-red/40 px-4 py-2 -skew-x-6">
+          {/* Phantom Thieves stamp - Hidden on mobile to prevent squishing */}
+          <div className="hidden md:block flex-shrink-0 border-2 border-p5-red/40 px-4 py-2 -skew-x-6">
             <span className="font-mono text-p5-red/50 text-[10px] uppercase tracking-[0.3em]">
               PHANTOM THIEVES
             </span>

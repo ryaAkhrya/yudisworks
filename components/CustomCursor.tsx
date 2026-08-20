@@ -1,22 +1,15 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
-  // Start as null — we'll determine desktop vs mobile after mount
-  const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // Only activate on true pointer devices (mouse/trackpad) with viewport ≥768px
+    // Only activate event listeners on true pointer devices (mouse/trackpad)
     const pointerFine = window.matchMedia("(pointer: fine)").matches;
-    const wideEnough = window.innerWidth >= 768;
-    if (!pointerFine || !wideEnough) {
-      setIsDesktop(false);
-      return;
-    }
-    setIsDesktop(true);
+    if (!pointerFine) return;
 
     const cursor = cursorRef.current;
     if (!cursor) return;
@@ -41,11 +34,6 @@ export default function CustomCursor() {
       document.removeEventListener("mouseenter", onMouseEnter);
     };
   }, []);
-
-  // Don't render on mobile / touch devices at all
-  if (isDesktop === false) return null;
-  // Still hydrating — render hidden so no flicker
-  if (isDesktop === null) return null;
 
   return (
     <div
