@@ -12,6 +12,7 @@ import {
 } from "./actions";
 import { logout } from "./login/actions";
 import { createClient } from "@/utils/supabase/server";
+import ProjectItemForm from "@/components/ProjectItemForm";
 
 const inputCls =
   "p-3 bg-p5-paper border-2 border-p5-black font-bold focus:outline-none focus:border-p5-red";
@@ -177,31 +178,7 @@ export default async function StudioDashboard() {
             <h2 className="text-3xl font-black text-p5-black uppercase mb-6 border-b-4 border-p5-black pb-2">
               {"// Project Files (Items)"}
             </h2>
-            <form action={addProjectItem} className="flex flex-col gap-3 mb-8">
-              <select name="category_id" required className={`${inputCls} bg-p5-paper`}>
-                <option value="">— Select Category —</option>
-                {displayCategories.map((c) => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
-              <input name="title" placeholder="Project Title" required className={inputCls} />
-              <input name="status" placeholder="Status (e.g. LIVE, CLASSIFIED)" required className={inputCls} />
-              <div className="flex items-center gap-3">
-                <input name="is_redacted" type="checkbox" id="is_redacted" className="w-5 h-5 accent-p5-red" />
-                <label htmlFor="is_redacted" className="font-bold uppercase">Redact Title on Public Site</label>
-              </div>
-              <label className="font-bold uppercase text-sm">Upload Document Pages (images):</label>
-              <input
-                name="files"
-                type="file"
-                multiple
-                accept="image/*,application/pdf"
-                className="p-3 bg-p5-black text-p5-paper border-2 border-p5-red font-bold file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-p5-red file:text-p5-paper file:font-bold hover:file:bg-p5-paper hover:file:text-p5-black cursor-pointer"
-              />
-              <button type="submit" className="mt-2 bg-p5-black text-p5-paper font-black uppercase text-xl py-3 border-4 border-p5-red hover:-translate-y-1 transition-transform hover:bg-p5-red hover:border-p5-black">
-                Deploy File
-              </button>
-            </form>
+            <ProjectItemForm categories={displayCategories} inputCls={inputCls} />
 
             <h3 className="text-xl font-black text-p5-black uppercase mb-3">Current Files</h3>
             <ul className="flex flex-col gap-3">
@@ -213,7 +190,7 @@ export default async function StudioDashboard() {
                   <div>
                     <p className="font-bold uppercase text-p5-black">{item.title}</p>
                     <p className="text-p5-black/50 text-sm font-mono">
-                      {(item.project_categories as { name: string } | null)?.name ?? "—"} | {item.status} | {item.image_urls?.length ?? 0} page(s)
+                      {(item.project_categories as { name: string } | null)?.name ?? "—"} | {item.status} | {item.file_url ? 'Linked PDF' : (item.image_urls?.length ? `${item.image_urls.length} page(s)` : 'No File')}
                     </p>
                   </div>
                   <form action={deleteProjectItem.bind(null, item.id)}>

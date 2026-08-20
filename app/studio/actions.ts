@@ -139,35 +139,20 @@ export async function addProjectItem(formData: FormData) {
   const title = formData.get("title") as string;
   const status = formData.get("status") as string;
   const is_redacted = formData.get("is_redacted") === "on";
-
-  // Handle multiple file uploads
-  const files = formData.getAll("files") as File[];
-  const image_urls: string[] = [];
-
-  for (const file of files) {
-    if (file && file.size > 0) {
-      const fileName = `${Date.now()}-${file.name.replace(/\s/g, "_")}`;
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from("project-files")
-        .upload(fileName, file);
-
-      if (!uploadError && uploadData) {
-        const { data: publicUrlData } = supabase.storage
-          .from("project-files")
-          .getPublicUrl(uploadData.path);
-        image_urls.push(publicUrlData.publicUrl);
-      }
-    }
-  }
+  const file_url = (formData.get("file_url") as string)?.trim() || null;
 
   const { error } = await supabase.from("project_items").insert([
-    { category_id, title, status, is_redacted, image_urls },
+    { category_id, title, status, is_redacted, file_url },
   ]);
 
-  if (error) console.error("addProjectItem error:", error);
+  if (error) {
+    console.error("addProjectItem error:", error);
+    return { error: error.message };
+  }
 
   revalidatePath("/studio");
   revalidatePath("/");
+  return { success: true };
 }
 
 export async function deleteProjectItem(id: string) {

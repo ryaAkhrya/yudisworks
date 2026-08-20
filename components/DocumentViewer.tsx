@@ -8,6 +8,7 @@ interface ProjectItem {
   title: string;
   status: string;
   image_urls: string[] | string | null;
+  file_url?: string | null;
   is_redacted: boolean;
 }
 
@@ -176,12 +177,22 @@ export default function DocumentViewer({ item, onClose }: DocumentViewerProps) {
           <p className="text-p5-red font-mono text-xs uppercase">
             YUDISWORKS.ID / CONFIDENTIAL
           </p>
-          <button
-            onClick={handleClose}
-            className="bg-p5-red text-p5-paper font-black uppercase px-6 py-2 border-4 border-p5-paper hover:bg-p5-paper hover:text-p5-black transition-colors"
-          >
-            Close File
-          </button>
+          <div className="flex gap-4">
+            {item.file_url && item.file_url.toLowerCase() !== "coming soon" && (
+              <button
+                onClick={() => window.open(item.file_url as string, '_blank')}
+                className="bg-p5-red text-p5-paper font-black uppercase px-6 py-2 border-4 border-p5-paper hover:bg-p5-paper hover:text-p5-black transition-colors"
+              >
+                Open File
+              </button>
+            )}
+            <button
+              onClick={handleClose}
+              className="bg-transparent text-p5-paper font-black uppercase px-6 py-2 border-4 border-p5-paper hover:bg-p5-paper hover:text-p5-black transition-colors"
+            >
+              Close File
+            </button>
+          </div>
         </div>
       </div>
     </div>
