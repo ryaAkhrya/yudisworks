@@ -206,36 +206,162 @@ export async function updateHeroContent(formData: FormData) {
   revalidatePath("/studio");
 }
 
-export async function addTestimonial(formData: FormData) {
-  const supabase = await requireStudioUser();
-  const name = String(formData.get("name") ?? "").trim();
-  const message = String(formData.get("message") ?? "").trim();
+function normalizeSortOrder(value: FormDataEntryValue | null): number {
+  const raw = String(value ?? "0").trim();
+  if (!raw) return 0;
 
-  if (!name || !message) {
-    return;
-  }
+  const parsed = Number(raw);
+  if (!Number.isFinite(parsed)) return 0;
 
-  const { error } = await supabase.from("testimonials").insert([{ author: name, text: message }]);
-
-  if (error) {
-    console.error("addTestimonial error:", error);
-    return;
-  }
-
-  revalidatePath("/studio");
-  revalidatePath("/");
+  return Math.trunc(parsed);
 }
 
-export async function deleteTestimonial(id: string) {
-  const supabase = await requireStudioUser();
-  const { error } = await supabase.from("testimonials").delete().eq("id", id);
-  if (error) {
-    console.error("deleteTestimonial error:", error);
-    return;
+function buildTestimonialPayload(displayName: string, message: string, sortOrder: number, visible: boolean) {
+  return {
+    display_name: displayName,
+    message,
+    sort_order: sortOrder,
+    visible,
+    author: displayName,
+    text: message,
+    updated_at: new Date().toISOString(),
+  };
+}
+
+async function insertTestimonialRecord(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  payload: ReturnType<typeof buildTestimonialPayload>
+) {
+  const primary = await supabase.from("testimonials").insert([payload]);
+  if (!primary.error) {
+    return primary;
   }
 
-  revalidatePath("/studio");
-  revalidatePath("/");
+  const legacyError = primary.error.message ?? "";
+  if (/column .*display_name.*does not exist|column .*message.*does not exist|unknown column/i.test(legacyError)) {
+    return supabase.from("testimonials").insert([
+      {
+        author: payload.author,
+        text: payload.text,
+      },
+    ]);
+  }
+
+  return primary;
+}
+
+async function updateTestimonialRecord(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  id: string,
+  payload: ReturnType<typeof buildTestimonialPayload>
+) {
+  const primary = await supabase.from("testimonials").update(payload).eq("id", id);
+  if (!primary.error) {
+    return primary;
+  }
+
+  const legacyError = primary.error.message ?? "";
+  if (/column .*display_name.*does not exist|column .*message.*does not exist|unknown column/i.test(legacyError)) {
+    return supabase
+      .from("testimonials")
+      .update({
+        author: payload.author,
+        text: payload.text,
+      })
+      .eq("id", id);
+  }
+
+  return primary;
+}
+
+export async function addTestimonial(formData: FormData): Promise<ActionResult> {
+  try {
+    const supabase = await requireStudioUser();
+    const displayName = String(formData.get("display_name") ?? "").trim();
+    const message = String(formData.get("message") ?? "").trim();
+    const sortOrder = normalizeSortOrder(formData.get("sort_order"));
+    const visible = normalizeBoolean(formData.get("visible"));
+
+    if (!displayName || !message) {
+      return buildResultError("Display name and testimonial message are required.");
+    }
+
+    if (displayName.length > 120) {
+      return buildResultError("Display name must stay under 120 characters.");
+    }
+
+    if (message.length > 1000) {
+      return buildResultError("Testimonial must stay under 1000 characters.");
+    }
+
+    const payload = buildTestimonialPayload(displayName, message, sortOrder, visible);
+    const { error } = await insertTestimonialRecord(supabase, payload);
+
+    if (error) {
+      console.error("addTestimonial error:", error);
+      return buildResultError("Unable to save the testimonial right now. Please try again.");
+    }
+
+    revalidatePath("/studio");
+    revalidatePath("/");
+    return buildResultSuccess();
+  } catch (error) {
+    console.error("addTestimonial failed unexpectedly:", error);
+    return buildResultError("Unable to save the testimonial right now. Please try again.");
+  }
+}
+
+export async function updateTestimonial(id: string, formData: FormData): Promise<ActionResult> {
+  try {
+    const supabase = await requireStudioUser();
+    const displayName = String(formData.get("display_name") ?? "").trim();
+    const message = String(formData.get("message") ?? "").trim();
+    const sortOrder = normalizeSortOrder(formData.get("sort_order"));
+    const visible = normalizeBoolean(formData.get("visible"));
+
+    if (!displayName || !message) {
+      return buildResultError("Display name and testimonial message are required.");
+    }
+
+    if (displayName.length > 120) {
+      return buildResultError("Display name must stay under 120 characters.");
+    }
+
+    if (message.length > 1000) {
+      return buildResultError("Testimonial must stay under 1000 characters.");
+    }
+
+    const payload = buildTestimonialPayload(displayName, message, sortOrder, visible);
+    const { error } = await updateTestimonialRecord(supabase, id, payload);
+
+    if (error) {
+      console.error("updateTestimonial error:", error);
+      return buildResultError("Unable to update the testimonial right now. Please try again.");
+    }
+
+    revalidatePath("/studio");
+    revalidatePath("/");
+    return buildResultSuccess();
+  } catch (error) {
+    console.error("updateTestimonial failed unexpectedly:", error);
+    return buildResultError("Unable to update the testimonial right now. Please try again.");
+  }
+}
+
+export async function deleteTestimonial(id: string): Promise<void> {
+  try {
+    const supabase = await requireStudioUser();
+    const { error } = await supabase.from("testimonials").delete().eq("id", id);
+    if (error) {
+      console.error("deleteTestimonial error:", error);
+      return;
+    }
+
+    revalidatePath("/studio");
+    revalidatePath("/");
+  } catch (error) {
+    console.error("deleteTestimonial failed unexpectedly:", error);
+  }
 }
 
 export async function addCategory(formData: FormData) {

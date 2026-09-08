@@ -20,10 +20,10 @@ export default function Home() {
         <HeroWrapper />
         <ServicesWrapper />
         <ProjectCategoriesWrapper />
-        <TestimonialsWrapper />
         <LiveDeploymentsWrapper />
         <SoundtrackWrapper />
         <ConfidantFeedWrapper />
+        <TestimonialsWrapper />
         <Footer />
       </main>
     </>

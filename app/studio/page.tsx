@@ -9,6 +9,7 @@ import {
   deleteSkill,
   deleteWebProject,
   deleteMusicTrack,
+  deleteTestimonial,
 } from "./actions";
 import { logout } from "./login/actions";
 import { createClient } from "@/utils/supabase/server";
@@ -16,6 +17,7 @@ import ProjectItemForm from "@/components/ProjectItemForm";
 import { SkillCreateForm, SkillEditForm } from "@/components/SkillAdminForm";
 import { WebProjectCreateForm, WebProjectEditForm } from "@/components/WebProjectAdminForm";
 import { MusicTrackCreateForm, MusicTrackEditForm } from "@/components/MusicTrackAdminForm";
+import { TestimonialCreateForm, TestimonialEditForm } from "@/components/TestimonialAdminForm";
 
 const inputCls =
   "p-3 bg-p5-paper border-2 border-p5-black font-bold focus:outline-none focus:border-p5-red";
@@ -43,12 +45,49 @@ export default async function StudioDashboard() {
     supabase.from("music_tracks").select("*").order("is_featured", { ascending: false }).order("sort_order", { ascending: true }).order("created_at", { ascending: true }),
   ]);
 
+  let testimonialRows: Array<Record<string, unknown>> = [];
+  let testimonialError: { message?: string; code?: string; details?: string; hint?: string } | null = null;
+
+  try {
+    const response = await supabase
+      .from("testimonials")
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: true });
+
+    testimonialRows = (response.data as Array<Record<string, unknown>> | null) ?? [];
+    testimonialError = response.error as { message?: string; code?: string; details?: string; hint?: string } | null;
+  } catch (caughtError) {
+    testimonialError = caughtError as { message?: string; code?: string; details?: string; hint?: string };
+  }
+
+  if (testimonialError) {
+    console.error("Studio testimonials fetch error:", {
+      message: testimonialError.message,
+      code: testimonialError.code,
+      details: testimonialError.details,
+      hint: testimonialError.hint,
+    });
+  }
+
   const displayCategories = categories ?? [];
   const displayItems = projectItems ?? [];
   const displayFeed = confidantFeed ?? [];
   const displaySkills = skills ?? [];
   const displayWebProjects = webProjects ?? [];
   const displayMusicTracks = musicTracks ?? [];
+  const displayTestimonials = testimonialRows
+    .map((item) => ({
+      id: String(item.id),
+      display_name: String(item.display_name ?? item.author ?? "ANONYMOUS").trim() || "ANONYMOUS",
+      message: String(item.message ?? item.text ?? "").trim(),
+      sort_order: Number(item.sort_order ?? 0),
+      visible: item.visible !== false,
+      author: String(item.author ?? item.display_name ?? "ANONYMOUS").trim() || "ANONYMOUS",
+      text: String(item.text ?? item.message ?? "").trim(),
+    }))
+    .filter((item) => item.message.length > 0)
+    .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0) || 0);
 
   return (
     <div className="min-h-screen bg-p5-paper text-p5-black p-6 md:p-12 font-sans selection:bg-p5-red selection:text-p5-paper">
@@ -158,6 +197,47 @@ export default async function StudioDashboard() {
             </ul>
           </section>
         </div>
+
+        <section className="bg-p5-red p-8 border-4 border-p5-black shadow-[12px_12px_0px_#121212]">
+          <h2 className="text-3xl font-black text-p5-paper uppercase mb-6 border-b-4 border-p5-black pb-2">{"// THE PHAN-SITE / TESTIMONIALS"}</h2>
+
+          {testimonialError ? (
+            <div className="mb-6 rounded border-2 border-p5-paper bg-[#7a0000] p-4 text-sm font-bold uppercase text-p5-paper">
+              Testimonials storage is not configured yet. Run the Supabase migration file manually in the SQL editor.
+            </div>
+          ) : null}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <TestimonialCreateForm inputCls={inputCls} />
+
+            <div>
+              <h3 className="text-xl font-black text-p5-paper uppercase mb-3">Current Testimonials</h3>
+              <ul className="flex flex-col gap-4 max-h-[700px] overflow-y-auto pr-1">
+                {displayTestimonials.length === 0 && <li className="text-p5-paper/70 font-mono text-sm">No testimonials yet.</li>}
+                {displayTestimonials.map((testimonial) => (
+                  <li key={testimonial.id} className="bg-[#b40000] p-4 border-l-8 border-p5-black text-p5-paper">
+                    <div className="flex flex-col gap-3">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="font-black uppercase text-lg">{testimonial.display_name}</p>
+                        <span className="text-xs font-mono uppercase">#{testimonial.sort_order ?? 0}</span>
+                      </div>
+                      <p className="text-sm leading-relaxed font-bold">{testimonial.message}</p>
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="text-xs font-mono uppercase">{testimonial.visible ? "Visible" : "Hidden"}</span>
+                        <form action={deleteTestimonial.bind(null, testimonial.id)}>
+                          <button type="submit" className="bg-p5-paper text-p5-black font-black uppercase px-3 py-1 border-2 border-p5-black hover:bg-p5-black hover:text-p5-paper transition-colors">
+                            Delete
+                          </button>
+                        </form>
+                      </div>
+                      <TestimonialEditForm inputCls={inputCls} testimonial={testimonial} />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
 
         <section className="bg-p5-paper p-8 border-4 border-p5-black shadow-[12px_12px_0px_#121212]">
           <h2 className="text-3xl font-black text-p5-black uppercase mb-6 border-b-4 border-p5-black pb-2">{"// The Arsenal / Skills"}</h2>

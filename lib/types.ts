@@ -49,5 +49,16 @@ export interface MusicTrack {
   is_visible: boolean;
 }
 
+export interface Testimonial {
+  id: string;
+  created_at: string;
+  display_name: string;
+  message: string;
+  sort_order: number;
+  visible: boolean;
+  author?: string | null;
+  text?: string | null;
+}
+
 export const SKILL_VISUAL_VARIANTS: SkillVisualVariant[] = ["paper", "dark", "red", "outline"];
 export const WEB_PROJECT_STATUSES: WebProjectStatus[] = ["live", "private", "archived", "development"];

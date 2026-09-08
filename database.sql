@@ -12,9 +12,23 @@ DROP TABLE IF EXISTS heists CASCADE;
 CREATE TABLE IF NOT EXISTS testimonials (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  author TEXT NOT NULL,
-  text TEXT NOT NULL
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  author TEXT NOT NULL DEFAULT 'ANONYMOUS',
+  text TEXT NOT NULL DEFAULT '',
+  display_name TEXT,
+  message TEXT,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  visible BOOLEAN NOT NULL DEFAULT TRUE
 );
+
+UPDATE testimonials
+SET
+  display_name = COALESCE(display_name, author, 'ANONYMOUS'),
+  message = COALESCE(message, text, ''),
+  sort_order = COALESCE(sort_order, 0),
+  visible = COALESCE(visible, TRUE),
+  updated_at = COALESCE(updated_at, created_at, NOW())
+WHERE display_name IS NULL OR message IS NULL OR sort_order IS NULL OR visible IS NULL OR updated_at IS NULL;
 
 -- =========================================
 -- PROJECT CATEGORIES
@@ -74,8 +88,9 @@ ALTER TABLE project_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE project_items ENABLE ROW LEVEL SECURITY;
 
 -- Testimonials Policies
-CREATE POLICY "testimonials_select_public" ON testimonials FOR SELECT USING (true);
+CREATE POLICY "testimonials_select_public" ON testimonials FOR SELECT USING (visible = true);
 CREATE POLICY "testimonials_insert_auth" ON testimonials FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "testimonials_update_auth" ON testimonials FOR UPDATE USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
 CREATE POLICY "testimonials_delete_auth" ON testimonials FOR DELETE USING (auth.role() = 'authenticated');
 
 -- Project Categories Policies

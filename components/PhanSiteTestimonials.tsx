@@ -15,16 +15,22 @@ interface PhanSiteTestimonialsProps {
 export default function PhanSiteTestimonials({ testimonials }: PhanSiteTestimonialsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const visibleTestimonials = testimonials.filter((item) => Boolean(item.author && item.text));
 
   useGSAP(() => {
-    // Continuous upward scroll imitating a live forum
+    if (!trackRef.current) return;
+
     const tl = gsap.timeline({ repeat: -1 });
     tl.to(trackRef.current, {
-      yPercent: -50, // scroll half since we duplicate the list
+      yPercent: -50,
       ease: "none",
       duration: 15,
     });
   }, { scope: containerRef });
+
+  if (visibleTestimonials.length === 0) {
+    return null;
+  }
 
   return (
     <section id="phan-site" className="relative w-full py-24 px-6 md:px-16 bg-p5-black overflow-hidden border-t-8 border-p5-red">
@@ -46,7 +52,7 @@ export default function PhanSiteTestimonials({ testimonials }: PhanSiteTestimoni
         <div ref={containerRef} className="md:w-2/3 h-full overflow-hidden relative border-4 border-p5-paper shadow-[inset_0px_0px_20px_#121212]">
           <div ref={trackRef} className="flex flex-col gap-6 pt-6">
             {/* Render twice for seamless infinite scroll */}
-            {[...testimonials, ...testimonials].map((testi, i) => (
+            {[...visibleTestimonials, ...visibleTestimonials].map((testi, i) => (
               <div 
                 key={i} 
                 className="bg-[#1a1a1a] p-4 border-l-8 border-p5-red shadow-[4px_4px_0px_#F5F5F5] w-[85%] mx-auto skew-p5"
