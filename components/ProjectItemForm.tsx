@@ -22,16 +22,8 @@ export default function ProjectItemForm({ categories, inputCls }: ProjectItemFor
     setLoading(true);
 
     const formData = new FormData(e.currentTarget);
-    const result = await addProjectItem(formData);
-
-    if (result?.error) {
-      alert(`Error deploying file: ${result.error}`);
-      console.error(result.error);
-    } else {
-      // success, clear the form
-      formRef.current?.reset();
-    }
-    
+    await addProjectItem(formData);
+    formRef.current?.reset();
     setLoading(false);
   };
 

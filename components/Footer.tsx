@@ -244,14 +244,14 @@ export default function Footer() {
           </div>
 
           <h2 className="footer-headline text-6xl md:text-8xl lg:text-[7rem] font-black uppercase tracking-tighter leading-none text-p5-paper opacity-0">
-            <span className="block">THE SHOW'S</span>
+            <span className="block">THE SHOW&apos;S</span>
             <span className="block bg-p5-red text-p5-paper px-6 py-2 inline-block -skew-x-6 border-4 border-p5-paper shadow-[8px_8px_0px_#CE0000] mt-2">
               OVER.
             </span>
           </h2>
 
           <p className="footer-sub font-mono text-p5-paper/70 text-lg md:text-xl uppercase tracking-widest border-l-4 border-p5-red pl-4 opacity-0">
-            Got an impossible deadline?{" "}
+            Got an impossible deadline? 
             <span className="text-p5-red font-black">Send the calling card.</span>
           </p>
         </div>
