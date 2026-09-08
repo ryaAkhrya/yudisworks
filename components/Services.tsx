@@ -153,8 +153,7 @@ export default function Services({ skills = FALLBACK_SKILLS }: { skills?: Skill[
   }
 
   return (
-    <section id="arsenal" ref={containerRef} className="section-shell section-shell--dark relative w-full py-24 px-6 md:px-16 bg-p5-black overflow-hidden">
-      <div className="section-background-label" aria-hidden="true">THE ARSENAL</div>
+    <section id="arsenal" ref={containerRef} className="relative w-full py-24 px-6 md:px-16 bg-p5-black overflow-hidden">
       <Marquee />
 
       <div className="relative z-10 max-w-6xl mx-auto">

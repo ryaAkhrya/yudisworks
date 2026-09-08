@@ -198,7 +198,7 @@ export default function Footer() {
   return (
     <footer
       ref={footerRef}
-      className="section-shell section-shell--dark relative w-full bg-p5-black overflow-hidden border-t-8 border-p5-red"
+      className="relative w-full bg-p5-black overflow-hidden border-t-8 border-p5-red"
     >
       {/* ── Halftone dots ── */}
       <div

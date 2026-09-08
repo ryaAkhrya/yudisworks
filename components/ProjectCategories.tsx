@@ -191,9 +191,8 @@ export default function ProjectCategories({
     <section
       id="operations"
       ref={sectionRef}
-      className="section-shell section-shell--paper relative w-full py-20 md:py-24 px-8 sm:px-10 md:px-16 bg-p5-paper overflow-hidden"
+      className="relative w-full py-20 md:py-24 px-8 sm:px-10 md:px-16 bg-p5-paper overflow-hidden"
     >
-      <div className="section-background-label" aria-hidden="true">THE OPERATIONS</div>
       <div className="relative z-10 max-w-6xl mx-auto">
         <div className="mb-12 mt-8 md:mt-0 md:mb-16 flex justify-end">
           <h2

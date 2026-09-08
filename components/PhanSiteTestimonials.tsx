@@ -27,8 +27,7 @@ export default function PhanSiteTestimonials({ testimonials }: PhanSiteTestimoni
   }, { scope: containerRef });
 
   return (
-    <section id="phan-site" className="section-shell section-shell--dark relative w-full py-24 px-6 md:px-16 bg-p5-black overflow-hidden border-t-8 border-p5-red">
-      <div className="section-background-label section-background-label--light" aria-hidden="true">PHAN-SITE</div>
+    <section id="phan-site" className="relative w-full py-24 px-6 md:px-16 bg-p5-black overflow-hidden border-t-8 border-p5-red">
       <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-12 h-[600px]">
         
         {/* Title side */}
