@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import { gsap } from "@/lib/gsap";
 
 interface ProjectItem {
@@ -20,21 +20,9 @@ interface DocumentViewerProps {
 export default function DocumentViewer({ item, onClose }: DocumentViewerProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const docRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    // Slam-in animation on mount
-    gsap.fromTo(
-      docRef.current,
-      { scale: 0.6, opacity: 0, skewY: 8 },
-      { scale: 1, opacity: 1, skewY: 0, duration: 0.3, ease: "back.out(3)" }
-    );
-    // Lock scroll
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
-  }, []);
-
-  const handleClose = () => {
-    // Instant cut on close
+  const handleClose = useCallback(() => {
     gsap.to(docRef.current, {
       scale: 0.8,
       opacity: 0,
@@ -42,11 +30,53 @@ export default function DocumentViewer({ item, onClose }: DocumentViewerProps) {
       ease: "power2.in",
       onComplete: onClose,
     });
+  }, [onClose]);
+
+  useEffect(() => {
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+
+    gsap.fromTo(
+      docRef.current,
+      { scale: 0.6, opacity: 0, skewY: 8 },
+      { scale: 1, opacity: 1, skewY: 0, duration: 0.3, ease: "back.out(3)" }
+    );
+
+    const focusTrap = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleClose();
+      }
+    };
+
+    closeButtonRef.current?.focus();
+    document.addEventListener("keydown", focusTrap);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", focusTrap);
+      document.body.style.overflow = "";
+      previouslyFocused?.focus();
+    };
+  }, [handleClose]);
+
+  const isSafeExternalUrl = (url: string | null | undefined) => {
+    if (!url) return false;
+    const trimmed = url.trim();
+    if (!trimmed) return false;
+    return /^https?:\/\//i.test(trimmed) || trimmed.startsWith("/") || trimmed.startsWith("#");
+  };
+
+  const handleOpenFile = () => {
+    if (!item.file_url || !isSafeExternalUrl(item.file_url)) return;
+    const openedWindow = window.open(item.file_url, "_blank", "noopener,noreferrer");
+    if (openedWindow) openedWindow.opener = null;
   };
 
   return (
     <div
       ref={overlayRef}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="document-viewer-title"
       onClick={(e) => { if (e.target === overlayRef.current) handleClose(); }}
       className="fixed inset-0 z-[200] bg-p5-black/90 flex items-center justify-center p-4 md:p-12 overflow-y-auto"
     >
@@ -60,7 +90,7 @@ export default function DocumentViewer({ item, onClose }: DocumentViewerProps) {
             <p className="text-p5-red font-mono text-xs uppercase tracking-widest mb-1">
               CLASSIFIED / PHANTOM THIEVES ARCHIVE
             </p>
-            <h2 className="text-3xl md:text-4xl font-black uppercase text-p5-paper leading-tight">
+            <h2 id="document-viewer-title" className="text-3xl md:text-4xl font-black uppercase text-p5-paper leading-tight">
               {item.is_redacted ? (
                 <span className="bg-p5-red text-p5-red px-2 select-none">
                   {item.title}
@@ -71,9 +101,10 @@ export default function DocumentViewer({ item, onClose }: DocumentViewerProps) {
             </h2>
           </div>
           <button
+            ref={closeButtonRef}
             onClick={handleClose}
             className="text-p5-paper font-black text-5xl leading-none hover:text-p5-red transition-colors ml-6 mt-1"
-            aria-label="Close"
+            aria-label="Close document viewer"
           >
             ✕
           </button>
@@ -178,9 +209,9 @@ export default function DocumentViewer({ item, onClose }: DocumentViewerProps) {
             YUDISWORKS.ID / CONFIDENTIAL
           </p>
           <div className="flex gap-4">
-            {item.file_url && item.file_url.toLowerCase() !== "coming soon" && (
+            {item.file_url && item.file_url.toLowerCase() !== "coming soon" && isSafeExternalUrl(item.file_url) && (
               <button
-                onClick={() => window.open(item.file_url as string, '_blank')}
+                onClick={handleOpenFile}
                 className="bg-p5-red text-p5-paper font-black uppercase px-6 py-2 border-4 border-p5-paper hover:bg-p5-paper hover:text-p5-black transition-colors"
               >
                 Open File

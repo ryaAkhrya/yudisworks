@@ -1,8 +1,8 @@
 import { createBrowserClient } from "@supabase/ssr";
 
+import { getSupabaseConfig } from "@/utils/supabase/config";
+
 export function createClient() {
-  return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder-project.supabase.co",
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key"
-  );
+  const { url, anonKey } = getSupabaseConfig();
+  return createBrowserClient(url, anonKey);
 }

@@ -21,8 +21,24 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  title: "Phantom Freelancer",
-  description: "I'll Steal Your Deadlines.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://yudisworks.id"),
+  title: "Yudisworks | Phantom Freelancer",
+  description: "Creative portfolio, live deployments, and original soundtrack from Yudistira.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Yudisworks | Phantom Freelancer",
+    description: "Creative portfolio, live deployments, and original soundtrack from Yudistira.",
+    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://yudisworks.id",
+    siteName: "Yudisworks",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Yudisworks | Phantom Freelancer",
+    description: "Creative portfolio, live deployments, and original soundtrack from Yudistira.",
+  },
 };
 
 export default function RootLayout({
