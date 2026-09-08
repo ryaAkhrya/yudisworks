@@ -8,21 +8,25 @@ import LiveDeploymentsWrapper from "@/app/LiveDeploymentsWrapper";
 import SoundtrackWrapper from "@/app/SoundtrackWrapper";
 import ConfidantFeedWrapper from "@/app/ConfidantFeedWrapper";
 import Footer from "@/components/Footer";
+import TopNav from "@/components/TopNav";
 
 export default function Home() {
   return (
-    <main className="w-full">
-      <LoadingScreen />
-      <ScrollProgress />
-      <HeroWrapper />
-      <ServicesWrapper />
-      <ProjectCategoriesWrapper />
-      <TestimonialsWrapper />
-      <LiveDeploymentsWrapper />
-      <SoundtrackWrapper />
-      <ConfidantFeedWrapper />
-      <Footer />
-    </main>
+    <>
+      <TopNav />
+      <main className="w-full">
+        <LoadingScreen />
+        <ScrollProgress />
+        <HeroWrapper />
+        <ServicesWrapper />
+        <ProjectCategoriesWrapper />
+        <TestimonialsWrapper />
+        <LiveDeploymentsWrapper />
+        <SoundtrackWrapper />
+        <ConfidantFeedWrapper />
+        <Footer />
+      </main>
+    </>
   );
 }
 

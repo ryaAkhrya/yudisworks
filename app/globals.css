@@ -14,10 +14,12 @@
   --p5-red: #ce0000;
   --p5-red-soft: rgba(206, 0, 0, 0.14);
   --p5-black-soft: rgba(18, 18, 18, 0.08);
+  --navbar-height: clamp(72px, 7vw, 96px);
 }
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--navbar-height) + 0.5rem);
 }
 
 body {
@@ -47,6 +49,7 @@ section[id],
 footer {
   position: relative;
   isolation: isolate;
+  scroll-margin-top: calc(var(--navbar-height) + 1rem);
 }
 
 section[id]::before,
@@ -151,6 +154,17 @@ footer::after {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .top-nav,
+  .top-nav-inner,
+  .top-nav-mark,
+  .top-nav-brand,
+  .top-nav-subbrand,
+  .top-nav-link,
+  .top-nav-button,
+  .top-nav-hamburger-line {
+    transition: none !important;
   }
 }
 

@@ -22,22 +22,26 @@ const bebasNeue = Bebas_Neue({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://yudisworks.id"),
-  title: "Yudisworks | Phantom Freelancer",
-  description: "Creative portfolio, live deployments, and original soundtrack from Yudistira.",
+  title: "Yudisworks | Multidisciplinary Creative",
+  description: "Multidisciplinary creative portfolio of Yudistira, featuring web development, visual design, music, and selected creative work.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Yudisworks | Phantom Freelancer",
-    description: "Creative portfolio, live deployments, and original soundtrack from Yudistira.",
+    title: "Yudisworks | Multidisciplinary Creative",
+    description: "Multidisciplinary creative portfolio of Yudistira, featuring web development, visual design, music, and selected creative work.",
     url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://yudisworks.id",
     siteName: "Yudisworks",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Yudisworks | Phantom Freelancer",
-    description: "Creative portfolio, live deployments, and original soundtrack from Yudistira.",
+    title: "Yudisworks | Multidisciplinary Creative",
+    description: "Multidisciplinary creative portfolio of Yudistira, featuring web development, visual design, music, and selected creative work.",
+  },
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
   },
 };
 
