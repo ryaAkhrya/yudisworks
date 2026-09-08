@@ -92,7 +92,8 @@ export default function Soundtrack({ tracks }: SoundtrackProps) {
   const otherTracks = visibleTracks.filter((track) => track.id !== featuredTrack.id);
 
   return (
-    <section id="soundtrack" ref={sectionRef} className="relative w-full bg-p5-black py-24 px-6 md:px-16 overflow-hidden border-t-8 border-p5-red">
+    <section id="soundtrack" ref={sectionRef} className="section-shell section-shell--dark relative w-full bg-p5-black py-24 px-6 md:px-16 overflow-hidden border-t-8 border-p5-red">
+      <div className="section-background-label section-background-label--light" aria-hidden="true">THE SOUNDTRACK</div>
       <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ backgroundImage: "radial-gradient(#F5F5F5 1.4px, transparent 1.4px)", backgroundSize: "18px 18px" }} />
 
       <div className="relative z-10 max-w-6xl mx-auto">

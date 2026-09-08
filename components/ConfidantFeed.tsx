@@ -101,8 +101,9 @@ export default function ConfidantFeed({ posts }: ConfidantFeedProps) {
     <section
       id="confidant-network"
       ref={sectionRef}
-      className="relative w-full bg-p5-paper py-24 px-6 md:px-16 overflow-hidden"
+      className="section-shell section-shell--paper relative w-full bg-p5-paper py-24 px-6 md:px-16 overflow-hidden"
     >
+      <div className="section-background-label" aria-hidden="true">DESIGN THAT I DO</div>
       {/* ── Background: red grid lines ── */}
       <div
         className="absolute inset-0 pointer-events-none z-0"

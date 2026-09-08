@@ -82,8 +82,9 @@ export default function LiveDeployments({ projects }: LiveDeploymentsProps) {
     <section
       id="live-deployments"
       ref={sectionRef}
-      className="relative w-full bg-p5-paper py-24 px-6 md:px-16 overflow-hidden"
+      className="section-shell section-shell--paper relative w-full bg-p5-paper py-24 px-6 md:px-16 overflow-hidden"
     >
+      <div className="section-background-label" aria-hidden="true">LIVE DEPLOYMENTS</div>
       <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ backgroundImage: "radial-gradient(#121212 1.5px, transparent 1.5px)", backgroundSize: "20px 20px" }} />
 
       <div className="relative z-10 max-w-6xl mx-auto">
