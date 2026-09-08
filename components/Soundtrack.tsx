@@ -1,7 +1,8 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element -- CMS images do not store intrinsic dimensions, so native sizing is required here. */
+
 import React, { useRef } from "react";
-import Image from "next/image";
 import { gsap, useGSAP } from "@/lib/gsap";
 import type { MusicTrack } from "@/lib/types";
 
@@ -108,18 +109,18 @@ export default function Soundtrack({ tracks }: SoundtrackProps) {
         </div>
 
         <article className="soundtrack-card relative grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-8 md:gap-10 items-center mb-16 border-8 border-p5-paper bg-p5-paper p-4 md:p-6 shadow-[18px_18px_0px_#CE0000]">
-          <div className="relative aspect-square overflow-hidden border-8 border-p5-black bg-p5-black">
+          <div className="overflow-hidden border-8 border-p5-black bg-p5-paper">
             {featuredTrack.cover_image_url ? (
-              <Image
+              <img
                 src={featuredTrack.cover_image_url}
                 alt={`Cover artwork for ${featuredTrack.title} by ${featuredTrack.artist}`}
-                fill
                 sizes="(max-width: 1024px) 100vw, 45vw"
-                className="object-cover"
-                priority
+                className="block h-auto w-full object-contain"
+                loading="eager"
+                fetchPriority="high"
               />
             ) : (
-              <div className="flex h-full items-center justify-center bg-p5-black text-p5-paper font-black uppercase text-2xl tracking-tight px-4 text-center">
+              <div className="flex aspect-square w-full items-center justify-center bg-p5-black px-4 text-center text-2xl font-black uppercase tracking-tight text-p5-paper">
                 {featuredTrack.title}
               </div>
             )}
@@ -186,17 +187,17 @@ export default function Soundtrack({ tracks }: SoundtrackProps) {
                   key={track.id}
                   className={`soundtrack-card relative flex flex-col gap-4 border-4 border-p5-paper bg-p5-paper p-4 shadow-[12px_12px_0px_#CE0000] ${isOffset ? "md:translate-y-8" : ""}`}
                 >
-                  <div className="relative h-52 overflow-hidden border-4 border-p5-black bg-p5-black">
+                  <div className="overflow-hidden border-4 border-p5-black bg-p5-paper">
                     {track.cover_image_url ? (
-                      <Image
+                      <img
                         src={track.cover_image_url}
                         alt={`Cover artwork for ${track.title} by ${track.artist}`}
-                        fill
                         sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover"
+                        className="block h-auto w-full object-contain"
+                        loading="lazy"
                       />
                     ) : (
-                      <div className="flex h-full items-center justify-center bg-p5-black text-p5-paper font-black uppercase text-xl tracking-tight px-4 text-center">
+                      <div className="flex h-52 w-full items-center justify-center bg-p5-black px-4 text-center text-xl font-black uppercase tracking-tight text-p5-paper">
                         {track.title}
                       </div>
                     )}

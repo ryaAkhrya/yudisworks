@@ -1,7 +1,8 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element -- CMS images do not store intrinsic dimensions, so native sizing is required here. */
+
 import React, { useRef } from "react";
-import Image from "next/image";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import type { WebProject } from "@/lib/types";
 
@@ -116,18 +117,18 @@ export default function LiveDeployments({ projects }: LiveDeploymentsProps) {
                       </span>
                     </div>
 
-                    <div className="relative h-[360px] md:h-[440px] overflow-hidden bg-p5-paper">
+                    <div className="flex justify-center overflow-hidden bg-p5-paper">
                       {previewUrl ? (
-                        <Image
+                        <img
                           src={previewUrl}
                           alt={`${project.title} preview`}
-                          fill
                           sizes="(max-width: 768px) 100vw, 50vw"
-                          className="object-cover object-top transition-transform duration-700 ease-out group-hover:-translate-y-6 motion-reduce:transform-none"
-                          priority={index === 0}
+                          className="block h-auto max-h-[34rem] w-full object-contain object-center"
+                          loading={index === 0 ? "eager" : "lazy"}
+                          fetchPriority={index === 0 ? "high" : "auto"}
                         />
                       ) : (
-                        <div className="flex h-full items-center justify-center bg-p5-paper text-p5-black font-black uppercase text-2xl border-4 border-dashed border-p5-black m-6">
+                        <div className="m-6 flex min-h-[312px] flex-1 items-center justify-center border-4 border-dashed border-p5-black bg-p5-paper text-2xl font-black uppercase text-p5-black md:min-h-[392px]">
                           Preview pending
                         </div>
                       )}

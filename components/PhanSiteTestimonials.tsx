@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
+import React from "react";
 
 interface Testimonial {
   author: string;
@@ -13,20 +12,7 @@ interface PhanSiteTestimonialsProps {
 }
 
 export default function PhanSiteTestimonials({ testimonials }: PhanSiteTestimonialsProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
   const visibleTestimonials = testimonials.filter((item) => Boolean(item.author && item.text));
-
-  useGSAP(() => {
-    if (!trackRef.current) return;
-
-    const tl = gsap.timeline({ repeat: -1 });
-    tl.to(trackRef.current, {
-      yPercent: -50,
-      ease: "none",
-      duration: 15,
-    });
-  }, { scope: containerRef });
 
   if (visibleTestimonials.length === 0) {
     return null;
@@ -49,10 +35,9 @@ export default function PhanSiteTestimonials({ testimonials }: PhanSiteTestimoni
         </div>
 
         {/* Scrolling Chat Side */}
-        <div ref={containerRef} className="md:w-2/3 h-full overflow-hidden relative border-4 border-p5-paper shadow-[inset_0px_0px_20px_#121212]">
-          <div ref={trackRef} className="flex flex-col gap-6 pt-6">
-            {/* Render twice for seamless infinite scroll */}
-            {[...visibleTestimonials, ...visibleTestimonials].map((testi, i) => (
+        <div className="testimonial-scroll md:w-2/3 h-full overflow-y-auto overflow-x-hidden relative border-4 border-p5-paper shadow-[inset_0px_0px_20px_#121212]">
+          <div className="flex flex-col gap-6 py-6">
+            {visibleTestimonials.map((testi, i) => (
               <div 
                 key={i} 
                 className="bg-[#1a1a1a] p-4 border-l-8 border-p5-red shadow-[4px_4px_0px_#F5F5F5] w-[85%] mx-auto skew-p5"
