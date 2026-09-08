@@ -60,6 +60,8 @@ const NAV_LINKS = [
   { label: "// THE ARSENAL", href: "#arsenal" },
   { label: "// THE OPERATIONS", href: "#operations" },
   { label: "// DESIGN THAT I DO", href: "#confidant-network" },
+  { label: "// LIVE DEPLOYMENTS", href: "#live-deployments" },
+  { label: "// THE SOUNDTRACK", href: "#soundtrack" },
   { label: "// PHAN-SITE", href: "#phan-site" },
 ];
 

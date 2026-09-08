@@ -5,6 +5,7 @@ import ScrollProgress from "@/components/ScrollProgress";
 import TestimonialsWrapper from "@/app/TestimonialsWrapper";
 import HeroWrapper from "@/app/HeroWrapper";
 import LiveDeploymentsWrapper from "@/app/LiveDeploymentsWrapper";
+import SoundtrackWrapper from "@/app/SoundtrackWrapper";
 import ConfidantFeedWrapper from "@/app/ConfidantFeedWrapper";
 import Footer from "@/components/Footer";
 
@@ -18,6 +19,7 @@ export default function Home() {
       <ProjectCategoriesWrapper />
       <TestimonialsWrapper />
       <LiveDeploymentsWrapper />
+      <SoundtrackWrapper />
       <ConfidantFeedWrapper />
       <Footer />
     </main>

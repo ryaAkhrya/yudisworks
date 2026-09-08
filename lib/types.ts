@@ -31,5 +31,23 @@ export interface WebProject {
   is_visible: boolean;
 }
 
+export interface MusicTrack {
+  id: string;
+  created_at: string;
+  title: string;
+  artist: string;
+  description: string | null;
+  cover_image_url: string | null;
+  release_year: number | null;
+  genre: string | null;
+  spotify_url: string | null;
+  youtube_url: string | null;
+  youtube_music_url: string | null;
+  soundcloud_url: string | null;
+  sort_order: number;
+  is_featured: boolean;
+  is_visible: boolean;
+}
+
 export const SKILL_VISUAL_VARIANTS: SkillVisualVariant[] = ["paper", "dark", "red", "outline"];
 export const WEB_PROJECT_STATUSES: WebProjectStatus[] = ["live", "private", "archived", "development"];

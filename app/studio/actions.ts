@@ -689,3 +689,205 @@ export async function deleteWebProject(id: string): Promise<void> {
   }
 }
 
+export async function addMusicTrack(formData: FormData): Promise<ActionResult> {
+  try {
+    const supabase = await requireStudioUser();
+
+    const title = String(formData.get("title") ?? "").trim();
+    const artist = String(formData.get("artist") ?? "Yudistira").trim() || "Yudistira";
+    const description = String(formData.get("description") ?? "").trim();
+    const releaseYearRaw = formData.get("release_year");
+    const release_year = releaseYearRaw === null || String(releaseYearRaw).trim() === "" ? null : Number(releaseYearRaw);
+    const genre = String(formData.get("genre") ?? "").trim();
+    const spotify_url_result = normalizeOptionalUrl(formData.get("spotify_url"), true);
+    const youtube_url_result = normalizeOptionalUrl(formData.get("youtube_url"), true);
+    const youtube_music_url_result = normalizeOptionalUrl(formData.get("youtube_music_url"), true);
+    const soundcloud_url_result = normalizeOptionalUrl(formData.get("soundcloud_url"), true);
+    const sort_order = Number(formData.get("sort_order") ?? 0);
+    const is_featured = normalizeBoolean(formData.get("is_featured"));
+    const is_visible = normalizeBoolean(formData.get("is_visible"));
+
+    if (!title) {
+      return buildResultError("Track title is required.");
+    }
+
+    if (!artist) {
+      return buildResultError("Artist name is required.");
+    }
+
+    if (description.length > 1000) {
+      return buildResultError("Description must stay under 1000 characters.");
+    }
+
+    if (release_year !== null && (!Number.isFinite(release_year) || release_year < 1900 || release_year > 2100)) {
+      return buildResultError("Release year must be a valid year between 1900 and 2100.");
+    }
+
+    for (const [label, result] of [
+      ["Spotify URL", spotify_url_result],
+      ["YouTube URL", youtube_url_result],
+      ["YouTube Music URL", youtube_music_url_result],
+      ["SoundCloud URL", soundcloud_url_result],
+    ] as const) {
+      if (result.error) {
+        return buildResultError(`${label} is invalid. Use a relative path, anchor, or HTTP(S) URL.`);
+      }
+    }
+
+    let cover_image_url: string | null = null;
+    const image = formData.get("cover_image") as File | null;
+    if (image && image.size > 0) {
+      try {
+        const validatedImage = validateImageFile(image);
+        if (validatedImage) {
+          cover_image_url = await uploadPublicFile(supabase, "music-assets", validatedImage, "track");
+        }
+      } catch (error) {
+        console.error("addMusicTrack: invalid image", error);
+        return buildResultError("Cover art must be a JPG, PNG, or WEBP file under 10MB.");
+      }
+    }
+
+    const { error } = await supabase.from("music_tracks").insert([
+      {
+        title,
+        artist,
+        description: description || null,
+        cover_image_url,
+        release_year,
+        genre: genre || null,
+        spotify_url: spotify_url_result.value,
+        youtube_url: youtube_url_result.value,
+        youtube_music_url: youtube_music_url_result.value,
+        soundcloud_url: soundcloud_url_result.value,
+        sort_order,
+        is_featured,
+        is_visible,
+      },
+    ]);
+
+    if (error) {
+      console.error("addMusicTrack error:", error);
+      return buildResultError("Unable to save the track right now. Please try again.");
+    }
+
+    revalidatePath("/");
+    revalidatePath("/studio");
+    return buildResultSuccess();
+  } catch (error) {
+    console.error("addMusicTrack failed unexpectedly:", error);
+    return buildResultError("Unable to save the track right now. Please try again.");
+  }
+}
+
+export async function updateMusicTrack(id: string, formData: FormData): Promise<ActionResult> {
+  try {
+    const supabase = await requireStudioUser();
+
+    const title = String(formData.get("title") ?? "").trim();
+    const artist = String(formData.get("artist") ?? "Yudistira").trim() || "Yudistira";
+    const description = String(formData.get("description") ?? "").trim();
+    const releaseYearRaw = formData.get("release_year");
+    const release_year = releaseYearRaw === null || String(releaseYearRaw).trim() === "" ? null : Number(releaseYearRaw);
+    const genre = String(formData.get("genre") ?? "").trim();
+    const spotify_url_result = normalizeOptionalUrl(formData.get("spotify_url"), true);
+    const youtube_url_result = normalizeOptionalUrl(formData.get("youtube_url"), true);
+    const youtube_music_url_result = normalizeOptionalUrl(formData.get("youtube_music_url"), true);
+    const soundcloud_url_result = normalizeOptionalUrl(formData.get("soundcloud_url"), true);
+    const sort_order = Number(formData.get("sort_order") ?? 0);
+    const is_featured = normalizeBoolean(formData.get("is_featured"));
+    const is_visible = normalizeBoolean(formData.get("is_visible"));
+
+    if (!title) {
+      return buildResultError("Track title is required.");
+    }
+
+    if (!artist) {
+      return buildResultError("Artist name is required.");
+    }
+
+    if (description.length > 1000) {
+      return buildResultError("Description must stay under 1000 characters.");
+    }
+
+    if (release_year !== null && (!Number.isFinite(release_year) || release_year < 1900 || release_year > 2100)) {
+      return buildResultError("Release year must be a valid year between 1900 and 2100.");
+    }
+
+    for (const [label, result] of [
+      ["Spotify URL", spotify_url_result],
+      ["YouTube URL", youtube_url_result],
+      ["YouTube Music URL", youtube_music_url_result],
+      ["SoundCloud URL", soundcloud_url_result],
+    ] as const) {
+      if (result.error) {
+        return buildResultError(`${label} is invalid. Use a relative path, anchor, or HTTP(S) URL.`);
+      }
+    }
+
+    const { data: existing } = await supabase.from("music_tracks").select("cover_image_url").eq("id", id).maybeSingle();
+
+    let cover_image_url = existing?.cover_image_url ?? null;
+    const image = formData.get("cover_image") as File | null;
+    if (image && image.size > 0) {
+      try {
+        const validatedImage = validateImageFile(image);
+        if (validatedImage) {
+          cover_image_url = await uploadPublicFile(supabase, "music-assets", validatedImage, "track");
+        }
+      } catch (error) {
+        console.error("updateMusicTrack: invalid image", error);
+        return buildResultError("Cover art must be a JPG, PNG, or WEBP file under 10MB.");
+      }
+    }
+
+    const { error } = await supabase
+      .from("music_tracks")
+      .update({
+        title,
+        artist,
+        description: description || null,
+        cover_image_url,
+        release_year,
+        genre: genre || null,
+        spotify_url: spotify_url_result.value,
+        youtube_url: youtube_url_result.value,
+        youtube_music_url: youtube_music_url_result.value,
+        soundcloud_url: soundcloud_url_result.value,
+        sort_order,
+        is_featured,
+        is_visible,
+      })
+      .eq("id", id);
+
+    if (error) {
+      console.error("updateMusicTrack error:", error);
+      return buildResultError("Unable to update the track right now. Please try again.");
+    }
+
+    revalidatePath("/");
+    revalidatePath("/studio");
+    return buildResultSuccess();
+  } catch (error) {
+    console.error("updateMusicTrack failed unexpectedly:", error);
+    return buildResultError("Unable to update the track right now. Please try again.");
+  }
+}
+
+export async function deleteMusicTrack(id: string): Promise<void> {
+  try {
+    const supabase = await requireStudioUser();
+    const { error } = await supabase.from("music_tracks").delete().eq("id", id);
+
+    if (error) {
+      console.error("deleteMusicTrack error:", error);
+      return;
+    }
+
+    revalidatePath("/");
+    revalidatePath("/studio");
+  } catch (error) {
+    console.error("deleteMusicTrack failed unexpectedly:", error);
+  }
+}
+

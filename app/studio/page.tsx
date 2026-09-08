@@ -8,12 +8,14 @@ import {
   deleteConfidantPost,
   deleteSkill,
   deleteWebProject,
+  deleteMusicTrack,
 } from "./actions";
 import { logout } from "./login/actions";
 import { createClient } from "@/utils/supabase/server";
 import ProjectItemForm from "@/components/ProjectItemForm";
 import { SkillCreateForm, SkillEditForm } from "@/components/SkillAdminForm";
 import { WebProjectCreateForm, WebProjectEditForm } from "@/components/WebProjectAdminForm";
+import { MusicTrackCreateForm, MusicTrackEditForm } from "@/components/MusicTrackAdminForm";
 
 const inputCls =
   "p-3 bg-p5-paper border-2 border-p5-black font-bold focus:outline-none focus:border-p5-red";
@@ -30,6 +32,7 @@ export default async function StudioDashboard() {
     { data: confidantFeed },
     { data: skills },
     { data: webProjects },
+    { data: musicTracks },
   ] = await Promise.all([
     supabase.from("project_categories").select("*").order("created_at", { ascending: true }),
     supabase.from("project_items").select("*, project_categories(name)").order("created_at", { ascending: false }),
@@ -37,6 +40,7 @@ export default async function StudioDashboard() {
     supabase.from("confidant_feed").select("*").order("created_at", { ascending: false }),
     supabase.from("skills").select("*").order("sort_order", { ascending: true }),
     supabase.from("web_projects").select("*").order("sort_order", { ascending: true }),
+    supabase.from("music_tracks").select("*").order("is_featured", { ascending: false }).order("sort_order", { ascending: true }).order("created_at", { ascending: true }),
   ]);
 
   const displayCategories = categories ?? [];
@@ -44,6 +48,7 @@ export default async function StudioDashboard() {
   const displayFeed = confidantFeed ?? [];
   const displaySkills = skills ?? [];
   const displayWebProjects = webProjects ?? [];
+  const displayMusicTracks = musicTracks ?? [];
 
   return (
     <div className="min-h-screen bg-p5-paper text-p5-black p-6 md:p-12 font-sans selection:bg-p5-red selection:text-p5-paper">
@@ -207,7 +212,32 @@ export default async function StudioDashboard() {
             </div>
           </div>
         </section>
+        <section className="bg-[#1a1a1a] p-8 border-4 border-p5-paper shadow-[12px_12px_0px_#CE0000]">
+          <h2 className="text-3xl font-black text-p5-paper uppercase mb-6 border-b-4 border-p5-paper pb-2">{"// The Soundtrack / Music"}</h2>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <MusicTrackCreateForm inputCls={inputDarkCls} />
+
+            <div>
+              <h3 className="text-xl font-black text-p5-paper uppercase mb-3">Current Tracks</h3>
+              <ul className="flex flex-col gap-4 max-h-[750px] overflow-y-auto pr-1">
+                {displayMusicTracks.length === 0 && <li className="text-p5-paper/40 font-mono text-sm">No tracks yet.</li>}
+                {displayMusicTracks.map((track) => (
+                  <li key={track.id} className="bg-[#242424] p-4 border-l-8 border-p5-red">
+                    <div className="flex flex-col gap-2">
+                      <MusicTrackEditForm inputCls={inputDarkCls} track={track} />
+                      <form action={deleteMusicTrack.bind(null, track.id)}>
+                        <button type="submit" className="bg-p5-paper text-p5-black font-black uppercase px-4 py-2 border-2 border-p5-paper hover:bg-p5-red hover:text-p5-paper transition-colors">
+                          Delete
+                        </button>
+                      </form>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
         <section className="bg-p5-black p-8 border-4 border-p5-red shadow-[12px_12px_0px_#CE0000]">
           <h2 className="text-3xl font-black text-p5-red uppercase mb-2 border-b-4 border-p5-red pb-2">{"// Confidant Feed"}</h2>
           <p className="text-p5-paper/50 font-mono text-sm mb-6">Visual transmissions broadcast to the Confidant Network section on the homepage.</p>
