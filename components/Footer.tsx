@@ -104,7 +104,7 @@ const SOCIAL_LINKS = [
   {
     id: "footer-email",
     label: "Email",
-    href: "yudistirabayuputra2004@gmail.com",
+    href: "mailto:yudistirabayuputra2004@gmail.com",
     icon: <IconEmail />,
     tilt: "rotate-3",
   },
