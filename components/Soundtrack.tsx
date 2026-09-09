@@ -116,8 +116,7 @@ export default function Soundtrack({ tracks }: SoundtrackProps) {
                 alt={`Cover artwork for ${featuredTrack.title} by ${featuredTrack.artist}`}
                 sizes="(max-width: 1024px) 100vw, 45vw"
                 className="block h-auto w-full object-contain"
-                loading="eager"
-                fetchPriority="high"
+                loading="lazy"
               />
             ) : (
               <div className="flex aspect-square w-full items-center justify-center bg-p5-black px-4 text-center text-2xl font-black uppercase tracking-tight text-p5-paper">

@@ -176,7 +176,6 @@ export default function ConfidantFeed({ posts }: ConfidantFeedProps) {
         <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-10 md:space-y-8">
           {posts.map((post, i) => {
             const tilt = CARD_TILTS[i % CARD_TILTS.length];
-            const isFirst = i === 0;
 
             return (
               <div
@@ -204,7 +203,6 @@ export default function ConfidantFeed({ posts }: ConfidantFeedProps) {
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      priority={isFirst}
                     />
 
                     {/* Scan-line overlay */}
@@ -233,6 +231,7 @@ export default function ConfidantFeed({ posts }: ConfidantFeedProps) {
                           day: "2-digit",
                           month: "short",
                           year: "numeric",
+                          timeZone: "UTC",
                         })}
                       </p>
                     </div>

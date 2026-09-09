@@ -124,8 +124,7 @@ export default function LiveDeployments({ projects }: LiveDeploymentsProps) {
                           alt={`${project.title} preview`}
                           sizes="(max-width: 768px) 100vw, 50vw"
                           className="block h-auto max-h-[34rem] w-full object-contain object-center"
-                          loading={index === 0 ? "eager" : "lazy"}
-                          fetchPriority={index === 0 ? "high" : "auto"}
+                          loading="lazy"
                         />
                       ) : (
                         <div className="m-6 flex min-h-[312px] flex-1 items-center justify-center border-4 border-dashed border-p5-black bg-p5-paper text-2xl font-black uppercase text-p5-black md:min-h-[392px]">
