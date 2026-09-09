@@ -209,7 +209,7 @@ export default function ProjectCategories({
               No operations on record yet.
             </p>
             <p className="font-mono text-p5-black/50 mt-2">
-              Admin: add categories in the Control Room.
+              Coming soon.
             </p>
           </div>
         ) : (
