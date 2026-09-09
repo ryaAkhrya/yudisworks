@@ -83,9 +83,9 @@ export default function LiveDeployments({ projects }: LiveDeploymentsProps) {
     <section
       id="live-deployments"
       ref={sectionRef}
-      className="relative w-full bg-p5-paper py-24 px-6 md:px-16 overflow-hidden"
+      className="relative w-full bg-p5-black py-24 px-6 md:px-16 overflow-hidden"
     >
-      <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ backgroundImage: "radial-gradient(#121212 1.5px, transparent 1.5px)", backgroundSize: "20px 20px" }} />
+      <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ backgroundImage: "radial-gradient(#F5F5F5 1.5px, transparent 1.5px)", backgroundSize: "20px 20px" }} />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         <div className="mb-16 flex justify-end">
@@ -149,11 +149,11 @@ export default function LiveDeployments({ projects }: LiveDeploymentsProps) {
                     )}
                   </div>
 
-                  <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase leading-none text-p5-black tracking-tighter">
+                  <h3 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase leading-none text-p5-paper tracking-tighter">
                     {project.title}
                   </h3>
 
-                  <p className="max-w-xl text-base md:text-lg font-bold text-p5-black/80">
+                  <p className="max-w-xl text-base md:text-lg font-bold text-p5-paper/80">
                     {project.description}
                   </p>
 
@@ -167,9 +167,9 @@ export default function LiveDeployments({ projects }: LiveDeploymentsProps) {
                     </ul>
                   )}
 
-                  <div className="flex flex-wrap items-center gap-4 border-t-4 border-b-4 border-p5-black py-3">
+                  <div className="flex flex-wrap items-center gap-4 border-t-4 border-b-4 border-p5-paper py-3">
                     {domain && (
-                      <span className="font-mono text-xs uppercase tracking-[0.2em] text-p5-black/70">
+                      <span className="font-mono text-xs uppercase tracking-[0.2em] text-p5-paper/70">
                         {domain}
                       </span>
                     )}
